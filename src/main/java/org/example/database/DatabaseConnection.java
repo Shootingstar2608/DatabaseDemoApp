@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class DatabaseConnection {
     public static Connection getConnection() {
-        String dbURL = "";
-        String dbUser = "";
-        String dbPassword = "";
+        String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=HeThongBanHang;encrypt=true;trustServerCertificate=true;";
+        String dbUser = "sa";
+        String dbPassword = "12345678";
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
