@@ -16,7 +16,12 @@
 │       └── java
 ...
 ```
+
+
 ## Package model (Data model)
+* **Nhiệm vụ:**  Chứa các class mô tả dữ liệu, ánh xạ trực tiếp 1-1 với các bảng trong SQL Server.
+* **Ví dụ:*** Class *SanPham.java* tương ứng với bảng **SAN_PHAM.**
+* **Lưu ý:**  Chỉ chứa thuộc tính *(properties), Constructor, Getter/Setter*. Không viết code xử lý logic hay giao diện ở đây.
 
 ## Package database (Database Configuration)
 
