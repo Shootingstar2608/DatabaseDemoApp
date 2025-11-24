@@ -80,8 +80,9 @@
 ## Chạy thử tính năng
 * Muốn chạy 1 tính năng liên quan đến bảng nào đó, ví dụ bảng **SAN_PHAM** trong file *.sql*, thì vào trong **src/main/java/org/example/view/SanPhamView.java** rồi chạy hàm main trong đó, mọi thay đổi trong file *.sql* sẽ được cập nhật trong **model/SanPham.java**, rồi lúc demo sẽ hiện rõ thay đổi trên UI.
 * Ở đây tớ có thêm 1 hàng vào trong bảng **SAN_PHAM**.
+* Chạy trong **view** thì nó cập nhật ra nhé.
 <img width="1272" height="277" alt="image" src="https://github.com/user-attachments/assets/3fdfd493-8d9d-4fb5-b918-39f92d88e6b9" />
- * Chạy trong **view** thì nó cập nhật ra nhé.
+
 <img width="1645" height="933" alt="image" src="https://github.com/user-attachments/assets/c28419c3-ca1b-4c00-826b-2ef40670f9e3" />
 
 
