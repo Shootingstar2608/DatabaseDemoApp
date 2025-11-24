@@ -7,19 +7,22 @@
 │   │   │   └── org
 │   │   │       └── example
 │   │   │           ├── Main.java
-│   │   │           ├── dao
-│   │   │           │   └── SanPhamDAO.java
-│   │   │           ├── database
-│   │   │           │   └── DatabaseConnection.java
-│   │   │           ├── model
-│   │   │           │   └── SanPham.java
-│   │   │           └── view
-│   │   │               └── SanPhamView.java
+│   │   │           ├── dao           # Chứa các hàm xử lý SQL (CRUD)
+│   │   │           ├── database      # Cấu hình kết nối tới cơ sở dữ liệu
+│   │   │           ├── model         # Chứa các đối tượng xử lý dữ liệu (POJO)
+│   │   │           └── view          # Chứa giao diện người dùng (GUI )
 │   │   └── resources
-│   └──
+│   └── test
+│       └── java
 ...
 ```
+## Package model (Data model)
 
+## Package database (Database Configuration)
+
+## Package dao (Data Access Object)
+
+## Package view (UI)
 
 # Hướng dẫn kết nối Database
 <img width="1918" height="757" alt="image" src="https://github.com/user-attachments/assets/b31fc2f4-d266-4df8-99a2-1aea2af18b63" />
