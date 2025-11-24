@@ -33,6 +33,27 @@
 * **Class chính:** DatabaseConnection.java.
 * **Lưu ý:** Chứa thông tin URL, Username, Password. Vào đây sửa mật khẩu sa cho đúng với máy cá nhân của mình.
 
+  ```
+  public class DatabaseConnection {
+    public static Connection getConnection() {
+        String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=HeThongBanHang;encrypt=true;trustServerCertificate=true;";
+        String dbUser = "sa";
+        String dbPassword = "12345678";
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPassword);
+            System.out.println("Ket noi database thanh cong"); // In ra để biết là OK
+            return conn;
+        } catch (Exception ex) {
+            System.out.println("Ket noi that bai: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return null;
+    }
+}
+  ```
+
 ## Package model (Data model)
 * **Nhiệm vụ:**  Chứa các class mô tả dữ liệu, ánh xạ trực tiếp 1-1 với các bảng trong SQL Server.
 * **Ví dụ:*** Class *SanPham.java* tương ứng với bảng **SAN_PHAM.**
