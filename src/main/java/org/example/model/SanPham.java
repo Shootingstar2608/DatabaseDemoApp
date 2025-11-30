@@ -1,21 +1,23 @@
 package org.example.model;
 
 public class SanPham {
-    private String maSanPham;       // PK: VARCHAR(100)
-    private String maSoShop;        // FK: CHAR(8)
-    private String tenSanPham;      // NVARCHAR(255)
-    private String thongTinSanPham; // NVARCHAR(511)
-    private String linkSanPham;     // VARCHAR(511)
-    private double giaHienThi;      // DECIMAL(18, 2)
-    private String loai;            // NVARCHAR(100)
-
+    private String maSanPham;
+    private String maSoShop;
+    private String tenSanPham;
+    private String thongTinSanPham;
+    private String linkSanPham;
+    private double giaHienThi;
+    private String loai;
+    
+    // Các biến mở rộng (Lấy từ bảng khác qua JOIN)
+    private String tenShop;
+    private String tenChuShop;   // <--- MỚI: Tên chủ shop
+    private String emailChuShop; // <--- MỚI: Email chủ shop
 
     public SanPham() {
     }
 
-    public SanPham(String maSanPham, String maSoShop, String tenSanPham,
-                   String thongTinSanPham, String linkSanPham,
-                   double giaHienThi, String loai) {
+    public SanPham(String maSanPham, String maSoShop, String tenSanPham, String thongTinSanPham, String linkSanPham, double giaHienThi, String loai, String tenShop) {
         this.maSanPham = maSanPham;
         this.maSoShop = maSoShop;
         this.tenSanPham = tenSanPham;
@@ -23,71 +25,44 @@ public class SanPham {
         this.linkSanPham = linkSanPham;
         this.giaHienThi = giaHienThi;
         this.loai = loai;
+        this.tenShop = tenShop;
     }
 
-    public String getMaSanPham() {
-        return maSanPham;
-    }
+    // --- GETTER & SETTER CŨ (GIỮ NGUYÊN) ---
+    public String getMaSanPham() { return maSanPham; }
+    public void setMaSanPham(String maSanPham) { this.maSanPham = maSanPham; }
 
-    public void setMaSanPham(String maSanPham) {
-        this.maSanPham = maSanPham;
-    }
+    public String getMaSoShop() { return maSoShop; }
+    public void setMaSoShop(String maSoShop) { this.maSoShop = maSoShop; }
 
-    public String getMaSoShop() {
-        return maSoShop;
-    }
+    public String getTenSanPham() { return tenSanPham; }
+    public void setTenSanPham(String tenSanPham) { this.tenSanPham = tenSanPham; }
 
-    public void setMaSoShop(String maSoShop) {
-        this.maSoShop = maSoShop;
-    }
+    public String getThongTinSanPham() { return thongTinSanPham; }
+    public void setThongTinSanPham(String thongTinSanPham) { this.thongTinSanPham = thongTinSanPham; }
 
-    public String getTenSanPham() {
-        return tenSanPham;
-    }
+    public String getLinkSanPham() { return linkSanPham; }
+    public void setLinkSanPham(String linkSanPham) { this.linkSanPham = linkSanPham; }
 
-    public void setTenSanPham(String tenSanPham) {
-        this.tenSanPham = tenSanPham;
-    }
+    public double getGiaHienThi() { return giaHienThi; }
+    public void setGiaHienThi(double giaHienThi) { this.giaHienThi = giaHienThi; }
 
-    public String getThongTinSanPham() {
-        return thongTinSanPham;
-    }
+    public String getLoai() { return loai; }
+    public void setLoai(String loai) { this.loai = loai; }
 
-    public void setThongTinSanPham(String thongTinSanPham) {
-        this.thongTinSanPham = thongTinSanPham;
-    }
+    public String getTenShop() { return tenShop; }
+    public void setTenShop(String tenShop) { this.tenShop = tenShop; }
 
-    public String getLinkSanPham() {
-        return linkSanPham;
-    }
+    // --- 👇 GETTER & SETTER MỚI (BẮT BUỘC THÊM) ---
+    
+    public String getTenChuShop() { return tenChuShop; }
+    public void setTenChuShop(String tenChuShop) { this.tenChuShop = tenChuShop; }
 
-    public void setLinkSanPham(String linkSanPham) {
-        this.linkSanPham = linkSanPham;
-    }
+    public String getEmailChuShop() { return emailChuShop; }
+    public void setEmailChuShop(String emailChuShop) { this.emailChuShop = emailChuShop; }
 
-    public double getGiaHienThi() {
-        return giaHienThi;
-    }
-
-    public void setGiaHienThi(double giaHienThi) {
-        this.giaHienThi = giaHienThi;
-    }
-
-    public String getLoai() {
-        return loai;
-    }
-
-    public void setLoai(String loai) {
-        this.loai = loai;
-    }
-
-    // cho dễ debug
     @Override
     public String toString() {
-        return "SanPham{" +
-                "maSanPham='" + maSanPham + '\'' +
-                ", tenSanPham='" + tenSanPham + '\'' +
-                ", giaHienThi=" + giaHienThi +
-                '}';
+        return tenSanPham;
     }
 }

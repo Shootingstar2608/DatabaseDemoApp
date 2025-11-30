@@ -3,45 +3,158 @@ package org.example.dao;
 import org.example.database.DatabaseConnection;
 import org.example.model.SanPham;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SanPhamDAO {
 
-    // Hàm lấy toàn bộ danh sách sản phẩm
-    public List<SanPham> layDanhSachSanPham() {
+    // 1. TÌM KIẾM & HIỂN THỊ (GỌI THỦ TỤC sp_TraCuuSanPham)
+    // Cập nhật: Gọi thủ tục với 7 tham số (thêm @TuKhoa cho ô tìm kiếm nhanh)
+    public List<SanPham> timKiemKetHop(String tuKhoaNhanh, String ma, String ten, String loai, String giaMin, String giaMax, String shop) {
         List<SanPham> danhSach = new ArrayList<>();
-        String sql = "SELECT * FROM SAN_PHAM"; // Tên bảng trong SQL
+        
+        // Gọi thủ tục SQL (7 dấu hỏi cho 7 tham số)
+        String sql = "{call sp_TraCuuSanPham(?, ?, ?, ?, ?, ?, ?)}";
 
         try {
             Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            CallableStatement stmt = conn.prepareCall(sql);
 
+            // --- MAPPING THAM SỐ ---
+            
+            // 1. @MaSP (Lấy từ ô chi tiết)
+            stmt.setString(1, (ma != null && !ma.trim().isEmpty()) ? ma : null);
+            
+            // 2. @TenSP (Lấy từ ô chi tiết)
+            stmt.setString(2, (ten != null && !ten.trim().isEmpty()) ? ten : null);
+            
+            // 3. @Loai
+            stmt.setString(3, (loai != null && !loai.trim().isEmpty()) ? loai : null);
+            
+            // 4. @Shop
+            stmt.setString(4, (shop != null && !shop.trim().isEmpty()) ? shop : null);
+            
+            // 5. @GiaMin
+            try {
+                if (giaMin != null && !giaMin.trim().isEmpty()) 
+                    stmt.setDouble(5, Double.parseDouble(giaMin));
+                else
+                    stmt.setNull(5, java.sql.Types.DECIMAL);
+            } catch (NumberFormatException e) {
+                stmt.setNull(5, java.sql.Types.DECIMAL);
+            }
+            
+            // 6. @GiaMax
+            try {
+                if (giaMax != null && !giaMax.trim().isEmpty()) 
+                    stmt.setDouble(6, Double.parseDouble(giaMax));
+                else
+                    stmt.setNull(6, java.sql.Types.DECIMAL);
+            } catch (NumberFormatException e) {
+                stmt.setNull(6, java.sql.Types.DECIMAL);
+            }
+
+            // 7. @TuKhoa (Ô Tìm kiếm nhanh ở trên cùng)
+            stmt.setString(7, (tuKhoaNhanh != null && !tuKhoaNhanh.trim().isEmpty()) ? tuKhoaNhanh : null);
+
+            // --- THỰC THI ---
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 SanPham sp = new SanPham();
-                // Map dữ liệu từ cột SQL vào thuộc tính Java
                 sp.setMaSanPham(rs.getString("MaSanPham"));
-                sp.setMaSoShop(rs.getString("MaSoShop"));
                 sp.setTenSanPham(rs.getString("TenSanPham"));
-                sp.setThongTinSanPham(rs.getString("ThongTinSanPham"));
-                sp.setLinkSanPham(rs.getString("LinkSanPham"));
                 sp.setGiaHienThi(rs.getDouble("GiaHienThi"));
                 sp.setLoai(rs.getString("Loai"));
+                sp.setMaSoShop(rs.getString("MaSoShop"));
+                
+                // Lấy tên shop
+                try {
+                    String tenShop = rs.getString("TenShop"); 
+                    sp.setTenShop(tenShop != null ? tenShop : "Không xác định");
+                } catch (Exception e) {
+                    sp.setTenShop("Lỗi hiển thị");
+                }
+                
+                // Lấy tên chủ shop (nếu có)
+                try {
+                    String tenChu = rs.getString("TenChuShop");
+                    sp.setTenChuShop(tenChu != null ? tenChu : "");
+                } catch (Exception e) {
+                    // Bỏ qua
+                }
 
                 danhSach.add(sp);
             }
-
-            rs.close();
-            stmt.close();
-            conn.close();
+            rs.close(); stmt.close(); conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("LỖI SQL: " + e.getMessage());
         }
         return danhSach;
     }
 
+    // Hàm lấy tất cả (Gọi lại hàm tìm kiếm với tham số null)
+    public List<SanPham> layDanhSachSanPham() {
+        return timKiemKetHop(null, null, null, null, null, null, null);
+    }
+
+    // =====================================================================
+    // CÁC HÀM CRUD (THÊM / SỬA / XÓA) - ĐÃ KÍCH HOẠT LẠI
+    // =====================================================================
+
+    // 2. THÊM SẢN PHẨM (Gọi sp_ThemSanPham)
+    public void themSanPham(SanPham sp) throws Exception {
+        String sql = "{call sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?)}"; // 7 tham số
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+            CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            stmt.setString(1, sp.getMaSanPham());
+            stmt.setString(2, sp.getMaSoShop());
+            stmt.setString(3, sp.getTenSanPham());
+            
+            // Tự động sinh dữ liệu cho các trường View không có nhập
+            stmt.setString(4, "Mô tả mặc định"); 
+            // Tạo link unique
+            stmt.setString(5, "link_" + sp.getMaSanPham() + "_" + System.currentTimeMillis() + ".com"); 
+            
+            stmt.setDouble(6, sp.getGiaHienThi());
+            stmt.setString(7, sp.getLoai());
+
+            stmt.executeUpdate();
+        } 
+        // Không catch Exception để ném ra View
+    }
+
+    // 3. CẬP NHẬT SẢN PHẨM (Gọi sp_CapNhatSanPham)
+    public void capNhatSanPham(SanPham sp) throws Exception {
+        String sql = "{call sp_CapNhatSanPham(?, ?, ?, ?, ?)}"; // 5 tham số
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+            CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            stmt.setString(1, sp.getMaSanPham()); // Khóa chính để tìm
+            stmt.setString(2, sp.getTenSanPham());
+            stmt.setString(3, null); // Giữ nguyên mô tả cũ
+            stmt.setDouble(4, sp.getGiaHienThi());
+            stmt.setString(5, sp.getLoai());
+
+            stmt.executeUpdate();
+        }
+    }
+
+    // 4. XÓA SẢN PHẨM (Gọi sp_XoaSanPham)
+    public void xoaSanPham(String maSP) throws Exception {
+        String sql = "{call sp_XoaSanPham(?)}"; // 1 tham số
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+            CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            stmt.setString(1, maSP);
+            stmt.executeUpdate();
+        }
+    }
 }
