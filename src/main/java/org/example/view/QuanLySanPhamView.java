@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.text.Collator;
 import java.util.Locale;
-import java.util.Comparator;
+// import java.util.Comparator;
 
 public class QuanLySanPhamView extends JFrame {
     private JTable table; // Bảng hiển thị sản phẩm
