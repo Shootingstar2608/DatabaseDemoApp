@@ -26,7 +26,7 @@
   Thực hiện truy vấn thông qua *query*.
   Đóng gói data vào file tương ứng trong package **model** và trả về.
   
-* **Ví dụ:** *SanPhamDAO.java* chứa hàm **layDanhSachSanPham()** để lấy dữ liệu từ bảng **SAN_PHAM** trả về List các đối tượng **SanPham**.
+* **Ví dụ:** *SanPhamDAO.java* chứa hàm **layDanhSachSanPham()** để lấy dữ liệu từ bảng **SAN_PHAM**, được truyền câu lệnh truy vấn *query* là **SELECT * FROM SAN_PHAM**, trả về List các đối tượng **SanPham**.
 
 ## Package *database* (Database Configuration)
 * **Nhiệm vụ:** Quản lý việc kết nối đến SQL Server.
