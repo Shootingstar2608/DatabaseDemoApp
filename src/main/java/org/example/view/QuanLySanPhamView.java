@@ -3,6 +3,7 @@ import org.example.dao.SanPhamDAO;
 import org.example.model.SanPham;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.text.Collator;
 import java.util.Locale;
-import java.util.Comparator;
+// import java.util.Comparator;
 
 public class QuanLySanPhamView extends JFrame {
     private JTable table; // Bảng hiển thị sản phẩm
@@ -32,6 +33,7 @@ public class QuanLySanPhamView extends JFrame {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+            javax.swing.UIManager.put("TextField.font", new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
             // Giao diện Tối (DARK MODE)
             //UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
             // Tùy chỉnh thêm (tùy chọn): Làm tròn các nút bấm cho mềm mại
@@ -64,7 +66,7 @@ public class QuanLySanPhamView extends JFrame {
         headerPanel.setOpaque(false);// Làm cho panel này trong suốt (để nhìn xuyên qua thấy màu nền xanh của mainTopPanel)
 
         JLabel lblTitle = new JLabel("  DANH SÁCH SẢN PHẨM");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 30));
         lblTitle.setForeground(new Color(0, 51, 102));// Chỉnh màu chữ: Xanh đậm (để nổi bật trên nền xanh nhạt)
         headerPanel.add(lblTitle);// 1. Bỏ chữ vào dòng tiêu đề
         mainTopPanel.add(headerPanel);// 2. Bỏ dòng tiêu đề vào khung chứa chính
@@ -74,11 +76,11 @@ public class QuanLySanPhamView extends JFrame {
         // --- Tìm kiếm nhanh ---
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setOpaque(false); // Làm cho panel này trong suốt (để nhìn xuyên qua thấy màu nền xanh của mainTopPanel)
-        searchPanel.add(createStyledLabel("Tìm kiếm: ")); // Gọi hàm mới
+        searchPanel.add(createStyledLabelTimkiem("Tìm kiếm: ")); // Gọi hàm mới
         txtTimKiem = new JTextField();
-        txtTimKiem.setPreferredSize(new Dimension(1350, 25)); // Rộng 600px, Cao 30px
+        txtTimKiem.setPreferredSize(new Dimension(1350, 35)); // Rộng 600px, Cao 30px
 
-        txtTimKiem.setFont(new Font("Arial", Font.PLAIN, 15));
+        txtTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         JButton btnTimKiem = new JButton("Tìm Kiếm");
         btnTimKiem.setBackground(new Color(0, 102, 204));
         btnTimKiem.setForeground(Color.WHITE);
@@ -86,10 +88,25 @@ public class QuanLySanPhamView extends JFrame {
         searchPanel.add(btnTimKiem); // Bỏ nút bấm vào bảng (nằm ngay sau ô nhập)
         mainTopPanel.add(searchPanel); // Bỏ nguyên cái bảng tìm kiếm này vào giao diện chính
 
-        // --- Chi tiết & Lọc (CÓ NÚT SORT) ---
+
+
         JPanel detailPanel = new JPanel(new GridLayout(0, 4, 10, 5));
-        detailPanel.setBorder(BorderFactory.createTitledBorder("Thông tin chi tiết & Lọc sản phẩm "));
+
+        // 1. Tạo border và lưu vào biến
+        javax.swing.border.TitledBorder border = BorderFactory.createTitledBorder("Thông tin chi tiết & Lọc sản phẩm ");
+        
+        // 2. 👇 CHỈNH CỠ CHỮ Ở ĐÂY (Font Segoe UI, Đậm, Cỡ 18)
+        // Bạn thay số 18 thành 20, 24... tùy ý muốn
+        border.setTitleFont(new Font("Segoe UI", Font.BOLD, 20));
+        
+        // (Tùy chọn) Chỉnh màu chữ tiêu đề cho đẹp (Xanh đậm giống giao diện)
+        border.setTitleColor(new Color(0, 51, 102));
+
+        // 3. Gán border đã chỉnh sửa vào panel
+        detailPanel.setBorder(border);
         detailPanel.setBackground(Color.WHITE);
+
+        
 
         txtMaSP = new JTextField(); txtTenSP = new JTextField();
         txtLoai = new JTextField(); txtMaShop = new JTextField();
@@ -125,7 +142,8 @@ public class QuanLySanPhamView extends JFrame {
         
         JPanel reloadPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         reloadPanel.setOpaque(false);
-        JButton btnReload = new JButton("Làm Mới / Hiện Tất Cả");
+        JButton btnReload = new JButton("Làm Mới");
+        btnReload.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btnReload.setBackground(new Color(40, 167, 69)); btnReload.setForeground(Color.WHITE);
         btnLinkToFriend = new JButton("Quản lý chi tiết (Thêm/Sửa/Xóa) >>");
         btnLinkToFriend.setBackground(new Color(255, 140, 0)); btnLinkToFriend.setForeground(Color.WHITE);
@@ -153,6 +171,70 @@ public class QuanLySanPhamView extends JFrame {
         };
 
         table = new JTable(tableModel);
+
+        // ================== BẮT ĐẦU DÁN TỪ ĐÂY ==================
+        
+        // Lấy header ra để chỉnh sửa
+        JTableHeader header = table.getTableHeader();
+        header.setReorderingAllowed(false); // Cố định cột, không cho kéo thả
+        header.setPreferredSize(new Dimension(header.getWidth(), 40)); // Header cao hơn (40px) cho dễ bấm
+
+        // Tạo bộ Renderer (Bộ vẽ giao diện) riêng cho Header để làm nó giống cái nút
+        DefaultTableCellRenderer customHeaderRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                // 1. Kế thừa giao diện mặc định để lấy các tính năng cơ bản
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                // 2. Trang trí cho giống nút bấm (Button)
+                label.setFont(new Font("Segoe UI", Font.BOLD, 18));
+                label.setBackground(new Color(230, 240, 255)); // Nền xanh nhạt
+                label.setForeground(new Color(0, 51, 102));    // Chữ xanh đậm
+                label.setHorizontalAlignment(JLabel.CENTER);   // Căn giữa
+                
+                // Tạo viền nổi (RAISED) - Đây là cái làm cho nó nhìn giống nút bấm 3D
+                label.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY), // Viền ngăn cách các cột
+                    BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED) // Hiệu ứng nút nổi lên
+                ));
+
+                // 3. Xử lý Icon mũi tên dựa trên trạng thái Sort
+                // Code này sẽ tự động kiểm tra xem bảng đang sort chiều nào để vẽ mũi tên
+                String text = value.toString();
+                String icon = ""; // Mặc định: Chưa sort (icon 2 chiều)
+
+                RowSorter<?> sorter = table.getRowSorter();
+                if (sorter != null) {
+                    List<? extends RowSorter.SortKey> keys = sorter.getSortKeys();
+                    // Kiểm tra xem cột hiện tại có đang được sort không
+                    if (!keys.isEmpty() && keys.get(0).getColumn() == column) {
+                        SortOrder order = keys.get(0).getSortOrder();
+                        if (order == SortOrder.ASCENDING) {
+                            icon = " ▲"; // Mũi tên lên (Tăng dần)
+                            label.setForeground(new Color(0, 150, 0)); // Chữ xanh lá
+                            label.setBackground(new Color(220, 255, 220)); // Nền sáng
+                        } else if (order == SortOrder.DESCENDING) {
+                            icon = " ▼"; // Mũi tên xuống (Giảm dần)
+                            label.setForeground(new Color(200, 0, 0)); // Chữ đỏ
+                            label.setBackground(new Color(255, 220, 220)); // Nền hồng
+                        }
+                    }
+                }
+                
+                label.setText(text + icon); // Gán chữ kèm icon vào nhãn
+                label.setToolTipText("Nhấn để sắp xếp cột: " + text); // Hiện gợi ý khi rê chuột
+                
+                return label;
+            }
+        };
+
+        // Áp dụng bộ vẽ nút bấm này cho TẤT CẢ các cột
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setHeaderRenderer(customHeaderRenderer);
+        }
+
+        // ================== KẾT THÚC DÁN TẠI ĐÂY ==================
+        
         
         // Cấu hình Sorter
         sorter = new TableRowSorter<>(tableModel);
@@ -254,40 +336,40 @@ public class QuanLySanPhamView extends JFrame {
         panel.setBackground(Color.WHITE);
         panel.add(textField, BorderLayout.CENTER); // tạo panel chứa các ô nhập liệu nằm ở giữa co giãn tự do
 
-        // Panel chứa 2 nút nhỏ
-        JPanel btnPanel = new JPanel(new GridLayout(2, 1)); // 2 hàng 1 cột cho 2 nút sort
+        // // Panel chứa 2 nút nhỏ
+        // JPanel btnPanel = new JPanel(new GridLayout(2, 1)); // 2 hàng 1 cột cho 2 nút sort
         
-        // Nút Tăng dần (Mũi tên lên)
-        JButton btnUp = new JButton("▲");  
-        btnUp.setMargin(new Insets(0, 2, 0, 2)); // Thu nhỏ lề nút
-        btnUp.setFont(new Font("Arial", Font.PLAIN, 8)); // Font nhỏ
-        btnUp.setFocusable(false); // Bỏ viền focus khi click (để nhìn đỡ rối)
-        btnUp.setToolTipText("Sắp xếp tăng dần (A-Z)");// tip
+        // // Nút Tăng dần (Mũi tên lên)
+        // JButton btnUp = new JButton("▲");  
+        // btnUp.setMargin(new Insets(0, 2, 0, 2)); // Thu nhỏ lề nút
+        // btnUp.setFont(new Font("Segoe UI", Font.PLAIN, 8)); // Font nhỏ
+        // btnUp.setFocusable(false); // Bỏ viền focus khi click (để nhìn đỡ rối)
+        // btnUp.setToolTipText("Sắp xếp tăng dần (A-Z)");// tip
         
-        // Nút Giảm dần (Mũi tên xuống)
-        JButton btnDown = new JButton("▼");
-        btnDown.setMargin(new Insets(0, 2, 0, 2)); // Thu nhỏ lề nút
-        btnDown.setFont(new Font("Arial", Font.PLAIN, 8)); // Font nhỏ
-        btnDown.setFocusable(false); // Bỏ viền focus khi click (để nhìn đỡ rối)
-        btnDown.setToolTipText("Sắp xếp giảm dần (Z-A)");// tip
+        // // Nút Giảm dần (Mũi tên xuống)
+        // JButton btnDown = new JButton("▼");
+        // btnDown.setMargin(new Insets(0, 2, 0, 2)); // Thu nhỏ lề nút
+        // btnDown.setFont(new Font("Segoe UI", Font.PLAIN, 8)); // Font nhỏ
+        // btnDown.setFocusable(false); // Bỏ viền focus khi click (để nhìn đỡ rối)
+        // btnDown.setToolTipText("Sắp xếp giảm dần (Z-A)");// tip
 
-        // Xử lý sự kiện Sort
-        btnUp.addActionListener(e -> {// Tạo quy tắc: Sắp xếp cột 'columnIndex' theo chiều ASCENDING (Tăng dần) A-Z
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            sortKeys.add(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING));
-            sorter.setSortKeys(sortKeys); // Ra lệnh cho bộ lọc (sorter) thực thi quy tắc này
-        });
+        // // Xử lý sự kiện Sort
+        // btnUp.addActionListener(e -> {// Tạo quy tắc: Sắp xếp cột 'columnIndex' theo chiều ASCENDING (Tăng dần) A-Z
+        //     List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        //     sortKeys.add(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING));
+        //     sorter.setSortKeys(sortKeys); // Ra lệnh cho bộ lọc (sorter) thực thi quy tắc này
+        // });
 
-        btnDown.addActionListener(e -> {// Tạo quy tắc: Sắp xếp cột 'columnIndex' theo chiều DESCENDING (Giảm dần) Z-A
-            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-            sortKeys.add(new RowSorter.SortKey(columnIndex, SortOrder.DESCENDING));
-            sorter.setSortKeys(sortKeys); // Ra lệnh cho bộ lọc (sorter) thực thi quy tắc này
-        });
+        // btnDown.addActionListener(e -> {// Tạo quy tắc: Sắp xếp cột 'columnIndex' theo chiều DESCENDING (Giảm dần) Z-A
+        //     List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        //     sortKeys.add(new RowSorter.SortKey(columnIndex, SortOrder.DESCENDING));
+        //     sorter.setSortKeys(sortKeys); // Ra lệnh cho bộ lọc (sorter) thực thi quy tắc này
+        // });
 
-        btnPanel.add(btnUp); // Bỏ nút Lên vào hộp nút
-        btnPanel.add(btnDown); // Bỏ nút Xuống vào hộp nút
+        // btnPanel.add(btnUp); // Bỏ nút Lên vào hộp nút
+        // btnPanel.add(btnDown); // Bỏ nút Xuống vào hộp nút
         
-        panel.add(btnPanel, BorderLayout.EAST); // Đặt hộp nút sang bên PHẢI (East)
+        // panel.add(btnPanel, BorderLayout.EAST); // Đặt hộp nút sang bên PHẢI (East)
         return panel; // Trả về nguyên cái cụm đã lắp ghép xong
     }
 
@@ -301,18 +383,18 @@ public class QuanLySanPhamView extends JFrame {
         String giaMin = txtGiaMin.getText().trim(); // trim để xóa bỏ khoảng trắng thừa nếu có
         String giaMax = txtGiaMax.getText().trim();
 
-        if (giaMin.isEmpty()) giaMin = "0"; // Mặc địnnh Giá Thấp Nhất bằng 0 nếu empty
+        if (giaMin.isEmpty()) giaMin = "0"; // Mặc định Giá Thấp Nhất bằng 0 nếu empty
 
         try {
             double min = Double.parseDouble(giaMin);
-            if (min < 0) { JOptionPane.showMessageDialog(this, "Giá phải lớn hơn không!"); return; }
+            if (min < 0) { JOptionPane.showMessageDialog(this, "Giá phải lớn hơn không!", "LỖI", JOptionPane.ERROR_MESSAGE); return; }
             if (!giaMax.isEmpty()) {
                 double max = Double.parseDouble(giaMax);
-                if (max < 0) { JOptionPane.showMessageDialog(this, "Giá phải lớn hơn không!"); return; }
-                if (min > max) { JOptionPane.showMessageDialog(this, "Giá thấp nhất phải nhỏ hơn Giá cao nhất!"); return; }
+                if (max < 0) { JOptionPane.showMessageDialog(this, "Giá phải lớn hơn không!", "LỖI", JOptionPane.ERROR_MESSAGE); return; }
+                if (min > max) { JOptionPane.showMessageDialog(this, "Giá Thấp Nhất phải nhỏ hơn Giá Cao Nhất!", "LỖI", JOptionPane.ERROR_MESSAGE); return; }
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ vào ô giá!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ vào ô giá!", "THÔNG BÁO", JOptionPane.ERROR_MESSAGE);
             return; // Không bao h có dụ này âu
         }
 
@@ -322,7 +404,7 @@ public class QuanLySanPhamView extends JFrame {
             JOptionPane.showMessageDialog(this,
                 "Không tìm thấy sản phẩm nào khớp!",
                 "THÔNG BÁO",
-                JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);
         }
 
         for (SanPham sp : list) {
@@ -338,7 +420,12 @@ public class QuanLySanPhamView extends JFrame {
     }
     private JLabel createStyledLabel(String text) { // hàm tạo đề mục đồng bộ
         JLabel label = new JLabel(text, SwingConstants.RIGHT);
-        label.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        label.setFont(new Font("Segoe UI", Font.BOLD, 18));// Mục để điền thông tin
+        return label;
+    }
+    private JLabel createStyledLabelTimkiem(String text) { // hàm tạo đề mục đồng bộ
+        JLabel label = new JLabel(text, SwingConstants.RIGHT);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 20));// Mục để điền thông tin
         return label;
     }
 }
