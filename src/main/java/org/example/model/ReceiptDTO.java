@@ -4,7 +4,13 @@ import java.math.BigDecimal;
 
 public class ReceiptDTO {
     private String maDonHang;
-    private BigDecimal giaGoc;
+    
+    // --- MỚI THÊM ---
+    private BigDecimal giaNiemYet;   // Giá ban đầu (chưa trừ gì cả)
+    private BigDecimal tienChietKhau; // Tiền giảm do chiết khấu %
+    // ----------------
+    
+    private BigDecimal giaGoc; // Đây là giá sau khi đã trừ chiết khấu (dùng để tính voucher)
     private BigDecimal phiVanChuyen;
     
     private String maVoucherShop;
@@ -20,7 +26,14 @@ public class ReceiptDTO {
 
     public ReceiptDTO() {}
 
-    // Getters and Setters
+    // Getters and Setters cho trường mới
+    public BigDecimal getGiaNiemYet() { return giaNiemYet; }
+    public void setGiaNiemYet(BigDecimal giaNiemYet) { this.giaNiemYet = giaNiemYet; }
+
+    public BigDecimal getTienChietKhau() { return tienChietKhau; }
+    public void setTienChietKhau(BigDecimal tienChietKhau) { this.tienChietKhau = tienChietKhau; }
+
+    // Các Getter/Setter cũ giữ nguyên...
     public String getMaDonHang() { return maDonHang; }
     public void setMaDonHang(String maDonHang) { this.maDonHang = maDonHang; }
 

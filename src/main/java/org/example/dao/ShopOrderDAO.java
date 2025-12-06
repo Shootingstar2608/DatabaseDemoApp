@@ -25,8 +25,10 @@ public class ShopOrderDAO {
                 o.setTenSanPhamHienThi(rs.getString("TenSanPhamHienThi"));
                 o.setTenNguoiMua(rs.getString("TenNguoiMua"));
                 o.setSoLuong(rs.getInt("SoLuong"));
+                o.setDonGia(rs.getBigDecimal("DonGia"));
                 o.setGiaBanDau(rs.getBigDecimal("GiaBanDau"));
                 o.setThanhTien(rs.getBigDecimal("ThanhTien"));
+                o.setThucThu(rs.getBigDecimal("ThucThu"));
                 o.setTrangThai(rs.getString("TrangThai"));
                 o.setNgayDat(rs.getTimestamp("NgayDat")); // Dùng getTimestamp để lấy cả giờ phút
                 o.setNgayDuKienGiao(rs.getDate("NgayDuKienGiao"));

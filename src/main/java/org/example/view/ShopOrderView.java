@@ -22,7 +22,7 @@ public class ShopOrderView extends JFrame {
 
     // --- MÀU SẮC THEME SHOPEE CHUẨN ---
     private final Color SHOPEE_ORANGE = new Color(238, 77, 45); 
-    //private final Color SHOPEE_ORANGE_DARK = new Color(200, 50, 30);
+    private final Color SHOPEE_ORANGE_DARK = new Color(200, 50, 30);
     private final Color BG_COLOR = new Color(245, 245, 245);
     private final Color TABLE_HEADER_BG = new Color(250, 250, 250);
     private final Color TEXT_GRAY = new Color(117, 117, 117);
@@ -48,7 +48,7 @@ public class ShopOrderView extends JFrame {
     private void initUI() {
         setTitle("Quản Lý Đơn Hàng - Kênh Người Bán");
         // 1. KÍCH THƯỚC BỰ 1280x720
-        setSize(1280, 720);
+        setSize(1980, 1080);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG_COLOR);
@@ -109,10 +109,19 @@ public class ShopOrderView extends JFrame {
 
         // Setup Table
         String[] columns = {
-            "STT", "Mã Đơn", "Sản Phẩm (Phân loại)", "Người Mua", 
-            "SL", "Đơn Giá Gốc", "Thực Thu", "Trạng Thái", "Ngày Đặt", "Hạn Giao"
+            "STT", 
+            "Mã Đơn", 
+            "Người Mua",           
+            "Sản Phẩm (Phân loại)", 
+            "Đơn giá",                // Lấy từ DB
+            "SL", 
+            "Thành tiền",             // GiaBanDau của đơn hàng
+            "Khách Trả", 
+            "Shop thực sự nhận",      // Thực thu
+            "Trạng Thái", 
+            "Ngày Đặt", 
+            "Hạn Giao"
         };
-        
         tableModel = new DefaultTableModel(columns, 0) {
             @Override // Không cho sửa
             public boolean isCellEditable(int row, int column) { return false; }
@@ -212,14 +221,17 @@ public class ShopOrderView extends JFrame {
         SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         for (OrderDTO o : list) {
+            // Không tính toán ở đây nữa, lấy trực tiếp getter
             tableModel.addRow(new Object[]{
                 o.getStt(),
                 o.getMaDonHang(),
-                o.getTenSanPhamHienThi(),
-                o.getTenNguoiMua(),
-                o.getSoLuong(),
-                vnFormat.format(o.getGiaBanDau()),
-                vnFormat.format(o.getThanhTien()), // Giá thực thu
+                o.getTenNguoiMua(),                
+                o.getTenSanPhamHienThi(),          
+                vnFormat.format(o.getDonGia()),    //(Đơn giá từ DB)
+                o.getSoLuong(),                    
+                vnFormat.format(o.getGiaBanDau()), // Cột 6 (Thành tiền)
+                vnFormat.format(o.getThanhTien()), // Cột 7 (Khách trả)
+                vnFormat.format(o.getThucThu()),   // Cột 8 (Shop nhận được á)
                 o.getTrangThai(),
                 o.getNgayDat() != null ? dateFormat.format(o.getNgayDat()) : "",
                 o.getNgayDuKienGiao() != null ? dateOnlyFormat.format(o.getNgayDuKienGiao()) : ""
@@ -289,25 +301,33 @@ public class ShopOrderView extends JFrame {
             }
         };
 
-        // Apply renderers
+        // --- Căn lề loại cho từng cột ---
         table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // STT
         table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer); // Mã
-        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer); // SL
-        table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);  // Giá gốc
-        table.getColumnModel().getColumn(6).setCellRenderer(moneyRenderer);  // Thực thu (Đậm)
-        table.getColumnModel().getColumn(7).setCellRenderer(statusRenderer); // Trạng thái (Màu)
-        table.getColumnModel().getColumn(8).setCellRenderer(centerRenderer); // Ngày đặt
-        table.getColumnModel().getColumn(9).setCellRenderer(centerRenderer); // Hạn giao
+        table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Người mua
+        table.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);  // Đơn giá
+        table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer); // SL
+        table.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);  // Thành tiền
+        table.getColumnModel().getColumn(7).setCellRenderer(rightRenderer);  // Khách trả
+        table.getColumnModel().getColumn(8).setCellRenderer(moneyRenderer);  // Shop nhận (Đậm)
+        table.getColumnModel().getColumn(9).setCellRenderer(statusRenderer); // Trạng thái
+        table.getColumnModel().getColumn(10).setCellRenderer(centerRenderer);// Ngày đặt
+        table.getColumnModel().getColumn(11).setCellRenderer(centerRenderer);// Hạn giao
 
-        // Set độ rộng cột (Responsive cho màn hình 1280)
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);
-        table.getColumnModel().getColumn(1).setPreferredWidth(100);
-        table.getColumnModel().getColumn(2).setPreferredWidth(350); // Tên SP rộng nhất
-        table.getColumnModel().getColumn(3).setPreferredWidth(150);
-        table.getColumnModel().getColumn(4).setPreferredWidth(60);
-        table.getColumnModel().getColumn(5).setPreferredWidth(130);
-        table.getColumnModel().getColumn(6).setPreferredWidth(130);
-        table.getColumnModel().getColumn(7).setPreferredWidth(130);
+        // --- SET ĐỘ RỘNG (RESPONSIVE 1920x1080) ---
+        // Tổng chiều rộng 
+        table.getColumnModel().getColumn(0).setPreferredWidth(50);   // STT
+        table.getColumnModel().getColumn(1).setPreferredWidth(110);  // Mã Đơn
+        table.getColumnModel().getColumn(2).setPreferredWidth(250);  // Người Mua
+        table.getColumnModel().getColumn(3).setPreferredWidth(310);  // Sản Phẩm (Rộng nhất)
+        table.getColumnModel().getColumn(4).setPreferredWidth(120);  // Đơn giá
+        table.getColumnModel().getColumn(5).setPreferredWidth(50);   // SL
+        table.getColumnModel().getColumn(6).setPreferredWidth(140);  // Thành tiền
+        table.getColumnModel().getColumn(7).setPreferredWidth(140);  // Khách trả
+        table.getColumnModel().getColumn(8).setPreferredWidth(140);  // Shop nhận
+        table.getColumnModel().getColumn(9).setPreferredWidth(150);  // Trạng thái
+        table.getColumnModel().getColumn(10).setPreferredWidth(180); // Ngày đặt (Rộng)
+        table.getColumnModel().getColumn(11).setPreferredWidth(180); // Hạn giao (Rộng)
     }
 
     public static void main(String[] args) {
