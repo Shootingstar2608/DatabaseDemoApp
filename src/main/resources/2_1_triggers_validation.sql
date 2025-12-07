@@ -24,24 +24,7 @@ BEGIN
     DECLARE @HasError BIT = 0;
 
     -- KIỂM TRA 1: Link sản phẩm không trùng (Logic phức tạp - cần so sánh với bản ghi khác)
-    IF EXISTS (SELECT 1
-    FROM inserted
-    WHERE GiaHienThi <= 0)
-    BEGIN
-        SET @ErrorMsg = @ErrorMsg + N' Lỗi: Giá hiển thị phải lớn hơn 0.' + CHAR(13) + CHAR(10);
-        SET @HasError = 1;
-    END
-
-    -- KIỂM TRA 2: Tên sản phẩm không được rỗng
-    IF EXISTS (SELECT 1
-    FROM inserted
-    WHERE TenSanPham IS NULL OR LTRIM(RTRIM(TenSanPham)) = '')
-    BEGIN
-        SET @ErrorMsg = @ErrorMsg + N' Lỗi: Tên sản phẩm không được để trống.' + CHAR(13) + CHAR(10);
-        SET @HasError = 1;
-    END
-
-    -- KIỂM TRA 3: Link sản phẩm không trùng (UNIQUE)
+    -- LƯU Ý: UNIQUE constraint đã tự động chặn link trùng, nhưng trigger cung cấp thông báo lỗi CỤ THỂ hơn
     IF EXISTS (
         SELECT i.LinkSanPham
     FROM inserted i
