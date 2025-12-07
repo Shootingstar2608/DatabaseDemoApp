@@ -9,8 +9,10 @@ public class OrderDTO {
     private String tenSanPhamHienThi;
     private String tenNguoiMua;
     private int soLuong;
+    private BigDecimal donGia;
     private BigDecimal giaBanDau;
     private BigDecimal thanhTien;
+    private BigDecimal thucThu;
     private String trangThai;
     private Date ngayDat;
     private Date ngayDuKienGiao;
@@ -33,11 +35,17 @@ public class OrderDTO {
     public int getSoLuong() { return soLuong; }
     public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
 
+    public BigDecimal getDonGia() { return donGia; }
+    public void setDonGia(BigDecimal donGia) { this.donGia = donGia; }
+
     public BigDecimal getGiaBanDau() { return giaBanDau; }
     public void setGiaBanDau(BigDecimal giaBanDau) { this.giaBanDau = giaBanDau; }
 
     public BigDecimal getThanhTien() { return thanhTien; }
     public void setThanhTien(BigDecimal thanhTien) { this.thanhTien = thanhTien; }
+
+    public BigDecimal getThucThu() { return thucThu; }
+    public void setThucThu(BigDecimal thucThu) { this.thucThu = thucThu; }
 
     public String getTrangThai() { return trangThai; }
     public void setTrangThai(String trangThai) { this.trangThai = trangThai; }

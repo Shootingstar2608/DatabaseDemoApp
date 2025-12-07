@@ -57,6 +57,8 @@ public class VoucherDAO {
             if (rs.next()) {
                 receipt = new ReceiptDTO();
                 receipt.setMaDonHang(rs.getString("MaDonHang"));
+                receipt.setGiaNiemYet(rs.getBigDecimal("GiaNiemYet"));
+                receipt.setTienChietKhau(rs.getBigDecimal("TienChietKhau"));
                 receipt.setGiaGoc(rs.getBigDecimal("GiaGoc"));
                 receipt.setPhiVanChuyen(rs.getBigDecimal("PhiVanChuyen"));
                 
@@ -75,6 +77,34 @@ public class VoucherDAO {
             e.printStackTrace();
         }
         return receipt;
+    }
+
+    // --- HÀM MỚI: GỌI PROCEDURE ĐẶT HÀNG ---
+    public boolean placeOrder(String maDonHang, String maShop, String maAdmin, String maTransport) {
+        String query = "{CALL dbo.sp_DatHang(?, ?, ?, ?)}"; // Cú pháp gọi SP
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cs = conn.prepareCall(query)) {
+
+            cs.setString(1, maDonHang);
+            
+            if (maShop == null || maShop.trim().isEmpty()) cs.setNull(2, Types.CHAR);
+            else cs.setString(2, maShop);
+
+            if (maAdmin == null || maAdmin.trim().isEmpty()) cs.setNull(3, Types.CHAR);
+            else cs.setString(3, maAdmin);
+
+            if (maTransport == null || maTransport.trim().isEmpty()) cs.setNull(4, Types.CHAR);
+            else cs.setString(4, maTransport);
+
+            boolean hasResults = cs.execute();
+            
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // Helper set params
