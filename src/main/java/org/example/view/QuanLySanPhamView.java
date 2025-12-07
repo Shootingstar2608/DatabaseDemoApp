@@ -165,8 +165,20 @@ public class QuanLySanPhamView extends JFrame {
         btnReload.setBackground(new Color(40, 167, 69));
         btnReload.setForeground(Color.WHITE);
 
+        // NÚT SỬA SẢN PHẨM
+        JButton btnSua = new JButton("✏️ Sửa");
+        btnSua.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btnSua.setBackground(new Color(255, 193, 7));
+        btnSua.setForeground(Color.BLACK);
+
+        // NÚT XÓA SẢN PHẨM
+        JButton btnXoa = new JButton("🗑️ Xóa");
+        btnXoa.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btnXoa.setBackground(new Color(220, 53, 69));
+        btnXoa.setForeground(Color.WHITE);
+
         // NÚT XEM LỊCH SỬ AUDIT
-        JButton btnAudit = new JButton(" Xem lịch sử thay đổi");
+        JButton btnAudit = new JButton("📋 Lịch sử");
         btnAudit.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btnAudit.setBackground(new Color(0, 102, 204));
         btnAudit.setForeground(Color.WHITE);
@@ -175,9 +187,14 @@ public class QuanLySanPhamView extends JFrame {
         });
 
         btnLinkToFriend = new JButton("◀ Quay lại Menu");
-        btnLinkToFriend.setBackground(new Color(220, 53, 69));
+        btnLinkToFriend.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btnLinkToFriend.setBackground(new Color(108, 117, 125));
         btnLinkToFriend.setForeground(Color.WHITE);
 
+        reloadPanel.add(btnSua);
+        reloadPanel.add(Box.createHorizontalStrut(10));
+        reloadPanel.add(btnXoa);
+        reloadPanel.add(Box.createHorizontalStrut(10));
         reloadPanel.add(btnReload);
         reloadPanel.add(Box.createHorizontalStrut(10));
         reloadPanel.add(btnAudit);
@@ -347,6 +364,101 @@ public class QuanLySanPhamView extends JFrame {
             defaultSort.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
             sorter.setSortKeys(defaultSort);
             loadData();
+        });
+
+        // XỬ LÝ NÚT SỬA
+        btnSua.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 sản phẩm để sửa!", "Thông báo",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            selectedRow = table.convertRowIndexToModel(selectedRow);
+            String maSP = tableModel.getValueAt(selectedRow, 0).toString();
+            String tenCu = tableModel.getValueAt(selectedRow, 1).toString();
+            double giaCu = (Double) tableModel.getValueAt(selectedRow, 2);
+            String loaiCu = tableModel.getValueAt(selectedRow, 3).toString();
+
+            // Tạo dialog sửa nhanh
+            JPanel dialogPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+            dialogPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JTextField txtTenMoi = new JTextField(tenCu);
+            JTextField txtGiaMoi = new JTextField(String.valueOf(giaCu));
+            JTextField txtLoaiMoi = new JTextField(loaiCu);
+            JTextField txtThongTinMoi = new JTextField("Cập nhật thông tin");
+
+            dialogPanel.add(new JLabel("Tên sản phẩm:"));
+            dialogPanel.add(txtTenMoi);
+            dialogPanel.add(new JLabel("Giá:"));
+            dialogPanel.add(txtGiaMoi);
+            dialogPanel.add(new JLabel("Loại:"));
+            dialogPanel.add(txtLoaiMoi);
+            dialogPanel.add(new JLabel("Thông tin:"));
+            dialogPanel.add(txtThongTinMoi);
+
+            int result = JOptionPane.showConfirmDialog(this, dialogPanel, "✏️ Sửa sản phẩm: " + maSP,
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    String tenMoi = txtTenMoi.getText().trim();
+                    double giaMoi = Double.parseDouble(txtGiaMoi.getText().trim());
+                    String loaiMoi = txtLoaiMoi.getText().trim();
+                    String thongTinMoi = txtThongTinMoi.getText().trim();
+
+                    if (tenMoi.isEmpty() || loaiMoi.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Tên và Loại không được để trống!", "Lỗi",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    boolean success = sanPhamDAO.capNhatSanPham(maSP, tenMoi, thongTinMoi, giaMoi, loaiMoi);
+                    if (success) {
+                        JOptionPane.showMessageDialog(this, "✅ Cập nhật thành công!", "Thành công",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        loadData();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "❌ Cập nhật thất bại! Kiểm tra trigger validation.",
+                                "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Giá phải là số hợp lệ!", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // XỬ LÝ NÚT XÓA
+        btnXoa.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 sản phẩm để xóa!", "Thông báo",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            selectedRow = table.convertRowIndexToModel(selectedRow);
+            String maSP = tableModel.getValueAt(selectedRow, 0).toString();
+            String tenSP = tableModel.getValueAt(selectedRow, 1).toString();
+
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "⚠️ XÁC NHẬN XÓA\n\nMã: " + maSP + "\nTên: " + tenSP
+                            + "\n\n🗑️ Xóa sản phẩm sẽ XÓA CASCADE:\n- Tất cả biến thể\n- Tất cả đánh giá\n- Tất cả ảnh/video\n- Tất cả giỏ hàng liên quan\n\nBạn có chắc chắn?",
+                    "Xác nhận xóa", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean success = sanPhamDAO.xoaSanPham(maSP);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "✅ Xóa thành công!\n\nĐã xóa sản phẩm và dữ liệu liên quan.",
+                            "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    loadData();
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "❌ Xóa thất bại!\n\nCó thể sản phẩm không tồn tại hoặc trigger chặn việc xóa.", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         btnLinkToFriend.addActionListener(e -> { // Quay về menu

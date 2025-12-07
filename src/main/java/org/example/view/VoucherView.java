@@ -27,22 +27,22 @@ public class VoucherView extends JFrame {
     private final Color SHOPEE_ORANGE_PRESSED = new Color(200, 50, 30); // Cam đậm khi nhấn
     private final Color BG_COLOR = new Color(245, 245, 245);
     private final Color TEXT_GRAY = new Color(117, 117, 117);
-    
+
     // Màu cho trạng thái Disabled
     private final Color BTN_DISABLED_BG = new Color(200, 200, 200);
     private final Color BTN_DISABLED_TEXT = new Color(150, 150, 150);
 
     // --- MÀU THEME VOUCHER (ĐẬM ĐÀ HƠN) ---
     // Shop: Đỏ Nâu Đậm
-    private final Color SHOP_THEME_COLOR = new Color(139, 0, 0); 
+    private final Color SHOP_THEME_COLOR = new Color(139, 0, 0);
     private final Color SHOP_BG_LIGHT = new Color(255, 235, 235);
-    
+
     // Admin: Cam Shopee Đậm
     private final Color ADMIN_THEME_COLOR = SHOPEE_ORANGE;
     private final Color ADMIN_BG_LIGHT = new Color(255, 242, 235);
 
     // Transport: Xanh Dương Đậm (Cyan Blue)
-    private final Color TRANS_THEME_COLOR = new Color(0, 140, 200); 
+    private final Color TRANS_THEME_COLOR = new Color(0, 140, 200);
     private final Color TRANS_BG_LIGHT = new Color(235, 250, 255);
 
     // --- LOGIC ---
@@ -58,12 +58,12 @@ public class VoucherView extends JFrame {
     private JLabel lblErrorMsg; // Log thông báo lỗi mã đơn
     private JPanel pnlShopSection, pnlAdminSection, pnlTransSection;
     private JLabel lblShopStatus, lblAdminStatus, lblTransStatus;
-    private JButton btnOrder; 
-    
+    private JButton btnOrder;
+
     // Components hiển thị chi tiết hóa đơn
     private JLabel lblValTienHang, lblValPhiShip, lblValGiamShop, lblValGiamAdmin, lblValGiamShip;
     private JLabel lblTongThanhToan;
-    private JPanel pnlDetailRows; 
+    private JPanel pnlDetailRows;
     private JLabel lblValGiaNiemYet, lblValChietKhau;
 
     public VoucherView() {
@@ -73,7 +73,7 @@ public class VoucherView extends JFrame {
 
     private void initUI() {
         setTitle("Hệ Thống Thanh Toán Hiện Đại");
-        setSize(600, 1000); 
+        setSize(600, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG_COLOR);
@@ -85,10 +85,9 @@ public class VoucherView extends JFrame {
         pnlHeader.setBorder(new EmptyBorder(15, 20, 15, 20));
         // Thêm shadow border nhẹ cho header
         pnlHeader.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230,230,230)),
-            new EmptyBorder(15, 20, 15, 20)
-        ));
-        
+                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)),
+                new EmptyBorder(15, 20, 15, 20)));
+
         JLabel lblTitle = new JLabel("Thanh Toán");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
         lblTitle.setForeground(SHOPEE_ORANGE); // Màu cam cho tiêu đề
@@ -106,23 +105,22 @@ public class VoucherView extends JFrame {
         pnlInputContainer.setBackground(Color.WHITE);
         pnlInputContainer.setBorder(new CompoundBorder(
                 new LineBorder(new Color(220, 220, 220), 1, true), // Bo góc nhẹ
-                new EmptyBorder(15, 20, 10, 20)
-        ));
+                new EmptyBorder(15, 20, 10, 20)));
         pnlInputContainer.setMaximumSize(new Dimension(600, 100));
 
         JPanel pnlInputRow = new JPanel(new BorderLayout(15, 5));
         pnlInputRow.setBackground(Color.WHITE);
-        
+
         JLabel lblMaDon = new JLabel("Mã Đơn Hàng:");
         lblMaDon.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        
-        txtMaDonHang = new JTextField(""); 
+
+        txtMaDonHang = new JTextField("");
         txtMaDonHang.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtMaDonHang.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY)); // Chỉ viền dưới
-        
+
         pnlInputRow.add(lblMaDon, BorderLayout.WEST);
         pnlInputRow.add(txtMaDonHang, BorderLayout.CENTER);
-        
+
         // Log báo lỗi ngay dưới ô input
         lblErrorMsg = new JLabel("Nhập mã đơn hàng để tiếp tục...");
         lblErrorMsg.setForeground(TEXT_GRAY);
@@ -137,23 +135,23 @@ public class VoucherView extends JFrame {
 
         // -- CÁC MỤC CHỌN VOUCHER --
         pnlShopSection = createVoucherSection("Voucher của Shop", "SHOP", SHOP_THEME_COLOR);
-        lblShopStatus = (JLabel) ((JPanel)pnlShopSection.getComponent(1)).getComponent(0);
+        lblShopStatus = (JLabel) ((JPanel) pnlShopSection.getComponent(1)).getComponent(0);
         setupSectionClick(pnlShopSection, "SHOP");
         pnlBody.add(pnlShopSection);
         pnlBody.add(Box.createVerticalStrut(15));
 
         // Đổi tên thành "Voucher Hệ thống"
         pnlAdminSection = createVoucherSection("Voucher Hệ thống", "ADMIN", ADMIN_THEME_COLOR);
-        lblAdminStatus = (JLabel) ((JPanel)pnlAdminSection.getComponent(1)).getComponent(0);
+        lblAdminStatus = (JLabel) ((JPanel) pnlAdminSection.getComponent(1)).getComponent(0);
         setupSectionClick(pnlAdminSection, "ADMIN");
         pnlBody.add(pnlAdminSection);
         pnlBody.add(Box.createVerticalStrut(15));
 
         pnlTransSection = createVoucherSection("Phương thức vận chuyển", "TRANSPORT", TRANS_THEME_COLOR);
-        lblTransStatus = (JLabel) ((JPanel)pnlTransSection.getComponent(1)).getComponent(0);
+        lblTransStatus = (JLabel) ((JPanel) pnlTransSection.getComponent(1)).getComponent(0);
         setupSectionClick(pnlTransSection, "TRANSPORT");
         pnlBody.add(pnlTransSection);
-        
+
         // -- CHI TIẾT THANH TOÁN --
         pnlBody.add(Box.createVerticalStrut(25));
         JPanel pnlPaymentDetail = createPaymentDetailPanel();
@@ -166,30 +164,29 @@ public class VoucherView extends JFrame {
         pnlFooter.setBackground(Color.WHITE);
         // Shadow top border
         pnlFooter.setBorder(BorderFactory.createCompoundBorder(
-             BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(230,230,230)),
-             new EmptyBorder(20, 25, 20, 25)
-        ));
+                BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(230, 230, 230)),
+                new EmptyBorder(20, 25, 20, 25)));
 
         JPanel pnlTotalText = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         pnlTotalText.setBackground(Color.WHITE);
         JLabel lblLabelTotal = new JLabel("Tổng thanh toán:");
         lblLabelTotal.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        
+
         lblTongThanhToan = new JLabel("0 đ");
         lblTongThanhToan.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTongThanhToan.setForeground(SHOPEE_ORANGE);
-        
+
         pnlTotalText.add(lblLabelTotal);
         pnlTotalText.add(lblTongThanhToan);
 
-        //btnOrder = new JButton("Đặt Hàng");
+        // btnOrder = new JButton("Đặt Hàng");
         btnOrder = new JButton("Đặt Hàng") {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 // Khử răng cưa cho đẹp
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
                 // LOGIC CHỌN MÀU (TỰ ĐỘNG)
                 if (!isEnabled()) {
                     g2.setColor(BTN_DISABLED_BG); // Màu khi disable
@@ -200,37 +197,38 @@ public class VoucherView extends JFrame {
                 } else {
                     g2.setColor(SHOPEE_ORANGE); // Màu bình thường
                 }
-        
+
                 // Vẽ hình chữ nhật full nút (nếu thích bo góc thì dùng fillRoundRect)
-                g2.fillRect(0, 0, getWidth(), getHeight()); 
-                
+                g2.fillRect(0, 0, getWidth(), getHeight());
+
                 g2.dispose();
-                
+
                 // Gọi super để nó vẽ chữ "Đặt Hàng" lên trên cái nền mình vừa vẽ
                 super.paintComponent(g);
             }
         };
         btnOrder.setContentAreaFilled(false);
-        btnOrder.setFocusPainted(false);   
-        btnOrder.setBorderPainted(false);    
-        btnOrder.setOpaque(false); 
+        btnOrder.setFocusPainted(false);
+        btnOrder.setBorderPainted(false);
+        btnOrder.setOpaque(false);
 
         btnOrder.setFont(new Font("Segoe UI", Font.BOLD, 18));
         btnOrder.setForeground(Color.WHITE); // Màu chữ luôn trắng
         btnOrder.setPreferredSize(new Dimension(180, 55));
         btnOrder.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Thêm icon bàn tay chỉ vào
 
-        setButtonStyle(btnOrder, false); 
+        setButtonStyle(btnOrder, false);
         btnOrder.setFont(new Font("Segoe UI", Font.BOLD, 18));
         btnOrder.setPreferredSize(new Dimension(180, 55));
-        
+
         // --- SỰ KIỆN NÚT ĐẶT HÀNG ĐÃ SỬA ---
         btnOrder.addActionListener(e -> {
-            if (currentMaDon.isEmpty()) return;
-            
+            if (currentMaDon.isEmpty())
+                return;
+
             // Disable nút để tránh click đúp
             btnOrder.setEnabled(false);
-            
+
             new SwingWorker<Boolean, Void>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
@@ -244,19 +242,21 @@ public class VoucherView extends JFrame {
                         boolean success = get();
                         if (success) {
                             String msg = "Đặt hàng thành công!\n" +
-                                         "Đơn hàng: " + currentMaDon + "\n" +
-                                         "Voucher đã lưu: " + 
-                                         (selectedShopCode != null ? selectedShopCode + ", " : "") +
-                                         (selectedAdminCode != null ? selectedAdminCode + ", " : "") +
-                                         (selectedTransCode != null ? selectedTransCode : "");
-                                         
-                            JOptionPane.showMessageDialog(VoucherView.this, msg, "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                                    "Đơn hàng: " + currentMaDon + "\n" +
+                                    "Voucher đã lưu: " +
+                                    (selectedShopCode != null ? selectedShopCode + ", " : "") +
+                                    (selectedAdminCode != null ? selectedAdminCode + ", " : "") +
+                                    (selectedTransCode != null ? selectedTransCode : "");
+
+                            JOptionPane.showMessageDialog(VoucherView.this, msg, "Thành công",
+                                    JOptionPane.INFORMATION_MESSAGE);
                             btnOrder.setEnabled(true);
                             // Reset sau khi đặt xong
-                            //resetData();
-                            //txtMaDonHang.setText("");
+                            // resetData();
+                            // txtMaDonHang.setText("");
                         } else {
-                            JOptionPane.showMessageDialog(VoucherView.this, "Có lỗi xảy ra khi lưu đơn hàng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(VoucherView.this, "Có lỗi xảy ra khi lưu đơn hàng!", "Lỗi",
+                                    JOptionPane.ERROR_MESSAGE);
                             btnOrder.setEnabled(true); // Mở lại nút nếu lỗi
                         }
                     } catch (Exception ex) {
@@ -280,9 +280,18 @@ public class VoucherView extends JFrame {
         debounceTimer.setRepeats(false);
 
         txtMaDonHang.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { handleInput(); }
-            public void removeUpdate(DocumentEvent e) { handleInput(); }
-            public void changedUpdate(DocumentEvent e) { handleInput(); }
+            public void insertUpdate(DocumentEvent e) {
+                handleInput();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                handleInput();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                handleInput();
+            }
+
             void handleInput() {
                 String text = txtMaDonHang.getText().trim();
                 if (!text.isEmpty()) {
@@ -308,23 +317,26 @@ public class VoucherView extends JFrame {
         lblTransStatus.setText("Chọn hoặc nhập mã >");
         setButtonStyle(btnOrder, false);
         // Reset bảng giá về 0
-        updatePaymentDetails(new ReceiptDTO() {{
-            setGiaNiemYet(java.math.BigDecimal.ZERO);
-            setTienChietKhau(java.math.BigDecimal.ZERO);
-            setGiaGoc(java.math.BigDecimal.ZERO);
-            setGiaGoc(java.math.BigDecimal.ZERO);
-            setPhiVanChuyen(java.math.BigDecimal.ZERO);
-            setGiamGiaShop(java.math.BigDecimal.ZERO);
-            setGiamGiaAdmin(java.math.BigDecimal.ZERO);
-            setGiamGiaShip(java.math.BigDecimal.ZERO);
-            setTongThanhToan(java.math.BigDecimal.ZERO);
-        }});
+        updatePaymentDetails(new ReceiptDTO() {
+            {
+                setGiaNiemYet(java.math.BigDecimal.ZERO);
+                setTienChietKhau(java.math.BigDecimal.ZERO);
+                setGiaGoc(java.math.BigDecimal.ZERO);
+                setGiaGoc(java.math.BigDecimal.ZERO);
+                setPhiVanChuyen(java.math.BigDecimal.ZERO);
+                setGiamGiaShop(java.math.BigDecimal.ZERO);
+                setGiamGiaAdmin(java.math.BigDecimal.ZERO);
+                setGiamGiaShip(java.math.BigDecimal.ZERO);
+                setTongThanhToan(java.math.BigDecimal.ZERO);
+            }
+        });
     }
 
     // --- LOGIC CHECK MÃ ĐƠN & AUTO LOAD ---
     private void checkMaDonTonTai() {
         String maDon = txtMaDonHang.getText().trim();
-        if (maDon.isEmpty()) return;
+        if (maDon.isEmpty())
+            return;
 
         // Chạy ngầm để không lag UI
         new SwingWorker<Boolean, Void>() {
@@ -371,23 +383,22 @@ public class VoucherView extends JFrame {
         panel.setBackground(Color.WHITE);
         panel.setBorder(new CompoundBorder(
                 new LineBorder(new Color(220, 220, 220), 1, true),
-                new EmptyBorder(20, 20, 20, 20)
-        ));
+                new EmptyBorder(20, 20, 20, 20)));
         // Tăng chiều cao tối đa lên xíu để chứa đủ dòng mới
-        panel.setMaximumSize(new Dimension(600, 350)); 
+        panel.setMaximumSize(new Dimension(600, 350));
 
         JLabel lblTitle = new JLabel("Chi tiết thanh toán");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
         lblTitle.setBorder(new EmptyBorder(0, 0, 15, 0));
         panel.add(lblTitle, BorderLayout.NORTH);
 
-        pnlDetailRows = new JPanel(new GridLayout(0, 1, 12, 10)); 
+        pnlDetailRows = new JPanel(new GridLayout(0, 1, 12, 10));
         pnlDetailRows.setBackground(Color.WHITE);
 
         // Khởi tạo các label mới
         lblValGiaNiemYet = createValueLabel();
         lblValChietKhau = createValueLabel(); // Label cho chiết khấu
-        
+
         lblValTienHang = createValueLabel(); // Cái này giờ là Giá sau chiết khấu (Tạm tính)
         lblValPhiShip = createValueLabel();
         lblValGiamShop = createValueLabel();
@@ -398,7 +409,7 @@ public class VoucherView extends JFrame {
         pnlDetailRows.add(createRow("Giá ban đầu", lblValGiaNiemYet));
         pnlDetailRows.add(createRow("Giá chiết khấu (%)", lblValChietKhau));
         // Dòng kẻ phân cách nhẹ (Optional, nếu muốn đẹp)
-        
+
         pnlDetailRows.add(createRow("Tổng tiền hàng (Sau CK)", lblValTienHang));
         pnlDetailRows.add(createRow("Phí vận chuyển", lblValPhiShip));
         pnlDetailRows.add(createRow("Voucher của Shop", lblValGiamShop));
@@ -431,27 +442,24 @@ public class VoucherView extends JFrame {
     private JPanel createVoucherSection(String title, String type, Color themeColor) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
-        panel.setMaximumSize(new Dimension(600, 75)); 
-        
+        panel.setMaximumSize(new Dimension(600, 75));
+
         // Viền hiện đại, shadow giả
         panel.setBorder(new CompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(240, 240, 240)), // Separator line dưới
                 new CompoundBorder(
-                    new LineBorder(new Color(230, 230, 230), 1, true), // Viền bo nhẹ
-                    BorderFactory.createCompoundBorder(
-                        BorderFactory.createMatteBorder(0, 6, 0, 0, themeColor), // Color indicator trái
-                        new EmptyBorder(15, 20, 15, 20)
-                    )
-                )
-        ));
+                        new LineBorder(new Color(230, 230, 230), 1, true), // Viền bo nhẹ
+                        BorderFactory.createCompoundBorder(
+                                BorderFactory.createMatteBorder(0, 6, 0, 0, themeColor), // Color indicator trái
+                                new EmptyBorder(15, 20, 15, 20)))));
         panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         JLabel lblTitle = new JLabel(title);
-        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
 
         JPanel pnlRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         pnlRight.setOpaque(false);
-        
+
         JLabel lblStatus = new JLabel("Chọn hoặc nhập mã >");
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         lblStatus.setForeground(TEXT_GRAY);
@@ -465,12 +473,12 @@ public class VoucherView extends JFrame {
 
     private void resetAndLoad(String maDon) {
         currentMaDon = maDon;
-        
+
         // Reset selections mỗi khi nhập mã đơn mới
         selectedShopCode = null;
         selectedAdminCode = null;
         selectedTransCode = null;
-        
+
         lblShopStatus.setText("Chọn hoặc nhập mã >");
         lblShopStatus.setForeground(TEXT_GRAY);
         lblAdminStatus.setText("Chọn hoặc nhập mã >");
@@ -503,7 +511,8 @@ public class VoucherView extends JFrame {
         dialog.setLayout(new BorderLayout());
         dialog.getContentPane().setBackground(BG_COLOR);
 
-        List<VoucherDTO> list = voucherDAO.getVoucherKhaDung(currentMaDon, selectedShopCode, selectedAdminCode, selectedTransCode);
+        List<VoucherDTO> list = voucherDAO.getVoucherKhaDung(currentMaDon, selectedShopCode, selectedAdminCode,
+                selectedTransCode);
         List<VoucherDTO> filteredList = list.stream()
                 .filter(v -> v.getLoaiVoucher().equalsIgnoreCase(type))
                 .collect(Collectors.toList());
@@ -527,7 +536,7 @@ public class VoucherView extends JFrame {
         }
 
         dialog.add(new JScrollPane(pnlList), BorderLayout.CENTER);
-        
+
         JButton btnNoUse = new JButton("Không sử dụng voucher loại này");
         btnNoUse.setBackground(Color.WHITE);
         btnNoUse.setForeground(TEXT_GRAY);
@@ -546,11 +555,11 @@ public class VoucherView extends JFrame {
     // --- CẬP NHẬT GIAO DIỆN THẺ VOUCHER (ĐẸP HƠN & FIX TRÀN CHỮ) ---
     private JPanel createVoucherCard(VoucherDTO v, String type, JDialog parentDialog) {
         boolean isUsable = v.isCoTheApDung();
-        
+
         Color themeColor;
         Color bgLightColor;
         String typeLabel;
-        
+
         if ("SHOP".equals(type)) {
             themeColor = SHOP_THEME_COLOR;
             bgLightColor = SHOP_BG_LIGHT;
@@ -564,25 +573,24 @@ public class VoucherView extends JFrame {
             bgLightColor = TRANS_BG_LIGHT;
             typeLabel = "Ship";
         }
-        
+
         Color borderColor = isUsable ? themeColor : new Color(200, 200, 200);
-        
+
         JPanel card = new JPanel(new BorderLayout(0, 0));
         card.setBackground(Color.WHITE);
         card.setBorder(new CompoundBorder(
-                new LineBorder(borderColor, isUsable ? 2 : 1), 
-                new EmptyBorder(0, 0, 0, 0)
-        ));
+                new LineBorder(borderColor, isUsable ? 2 : 1),
+                new EmptyBorder(0, 0, 0, 0)));
         // Cho phép card cao tự động để chứa đủ nội dung
-        card.setMaximumSize(new Dimension(500, isUsable ? 110 : 130)); 
+        card.setMaximumSize(new Dimension(500, isUsable ? 110 : 130));
 
         // PHẦN TRÁI: ICON
         JPanel pnlLeft = new JPanel(new GridBagLayout());
         pnlLeft.setPreferredSize(new Dimension(110, 110)); // Fixed size
         pnlLeft.setBackground(isUsable ? bgLightColor : new Color(245, 245, 245));
-        
-        pnlLeft.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(220, 220, 220))); 
-        
+
+        pnlLeft.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(220, 220, 220)));
+
         JLabel lblType = new JLabel("<html><div style='text-align:center'>" + typeLabel + "</div></html>");
         lblType.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblType.setForeground(isUsable ? themeColor : Color.GRAY);
@@ -593,16 +601,16 @@ public class VoucherView extends JFrame {
         pnlContent.setLayout(new BoxLayout(pnlContent, BoxLayout.Y_AXIS));
         pnlContent.setBackground(Color.WHITE);
         pnlContent.setBorder(new EmptyBorder(10, 15, 10, 5));
-        
+
         JLabel lblCode = new JLabel(v.getMaVoucher());
         lblCode.setFont(new Font("Segoe UI", Font.BOLD, 16));
         lblCode.setForeground(isUsable ? Color.BLACK : Color.GRAY);
         lblCode.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
+
         JLabel lblDesc = new JLabel("<html>" + v.getMoTaGiamGia() + "</html>");
         lblDesc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblDesc.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
+
         JLabel lblCondition = new JLabel(v.getDieuKienApDung());
         lblCondition.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblCondition.setForeground(TEXT_GRAY);
@@ -628,15 +636,17 @@ public class VoucherView extends JFrame {
         JPanel pnlRight = new JPanel(new GridBagLayout());
         pnlRight.setBackground(Color.WHITE);
         pnlRight.setPreferredSize(new Dimension(50, 110)); // Thu nhỏ lại vì ko chứa chữ nữa
-        pnlRight.setBorder(new EmptyBorder(0, 0, 0, 10)); 
-        
+        pnlRight.setBorder(new EmptyBorder(0, 0, 0, 10));
+
         if (isUsable) {
             JRadioButton radio = new JRadioButton();
             radio.setBackground(Color.WHITE);
-            String currentSelected = "SHOP".equals(type) ? selectedShopCode : ("ADMIN".equals(type) ? selectedAdminCode : selectedTransCode);
-            if (v.getMaVoucher().equals(currentSelected)) radio.setSelected(true);
+            String currentSelected = "SHOP".equals(type) ? selectedShopCode
+                    : ("ADMIN".equals(type) ? selectedAdminCode : selectedTransCode);
+            if (v.getMaVoucher().equals(currentSelected))
+                radio.setSelected(true);
             pnlRight.add(radio);
-            
+
             card.setCursor(new Cursor(Cursor.HAND_CURSOR));
             card.addMouseListener(new MouseAdapter() {
                 @Override
@@ -671,12 +681,14 @@ public class VoucherView extends JFrame {
     }
 
     private void reCalculate() {
-        if (currentMaDon.isEmpty()) return;
+        if (currentMaDon.isEmpty())
+            return;
 
         new SwingWorker<ReceiptDTO, Void>() {
             @Override
             protected ReceiptDTO doInBackground() throws Exception {
-                return voucherDAO.getReceiptDetails(currentMaDon, selectedShopCode, selectedAdminCode, selectedTransCode);
+                return voucherDAO.getReceiptDetails(currentMaDon, selectedShopCode, selectedAdminCode,
+                        selectedTransCode);
             }
 
             @Override
@@ -686,7 +698,7 @@ public class VoucherView extends JFrame {
                     if (r != null) {
                         // LOGIC MỚI: KIỂM TRA VÀ RESET VOUCHER VI PHẠM
                         checkAndResetVouchers(r);
-                        
+
                         updatePaymentDetails(r);
                     }
                 } catch (Exception e) {
@@ -729,34 +741,37 @@ public class VoucherView extends JFrame {
         }
 
         if (changed) {
-            JOptionPane.showMessageDialog(this, 
-                "Một số voucher đã bị hủy do thay đổi giá trị đơn hàng:\n" + msg.toString(),
-                "Thông báo thay đổi", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Một số voucher đã bị hủy do thay đổi giá trị đơn hàng:\n" + msg.toString(),
+                    "Thông báo thay đổi", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-   private void updatePaymentDetails(ReceiptDTO r) {
+    private void updatePaymentDetails(ReceiptDTO r) {
         NumberFormat vnCurrency = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
 
         // 1. Hiển thị Giá Niêm Yết
         lblValGiaNiemYet.setText(vnCurrency.format(r.getGiaNiemYet() != null ? r.getGiaNiemYet() : BigDecimal.ZERO));
-        
+
         // 2. Hiển thị Chiết Khấu (Màu cam, có dấu trừ)
         if (r.getTienChietKhau() != null && r.getTienChietKhau().compareTo(BigDecimal.ZERO) > 0) {
-             lblValChietKhau.setText("- " + vnCurrency.format(r.getTienChietKhau()));
-             lblValChietKhau.setForeground(SHOPEE_ORANGE);
+            lblValChietKhau.setText("- " + vnCurrency.format(r.getTienChietKhau()));
+            lblValChietKhau.setForeground(SHOPEE_ORANGE);
         } else {
-             lblValChietKhau.setText("0 đ");
-             lblValChietKhau.setForeground(Color.BLACK);
+            lblValChietKhau.setText("0 đ");
+            lblValChietKhau.setForeground(Color.BLACK);
         }
 
         // 3. Các thông số cũ
         lblValTienHang.setText(vnCurrency.format(r.getGiaGoc())); // Đây là giá sau khi trừ chiết khấu
         lblValPhiShip.setText(vnCurrency.format(r.getPhiVanChuyen()));
-        
-        lblValGiamShop.setText(r.getGiamGiaShop().intValue() > 0 ? "- " + vnCurrency.format(r.getGiamGiaShop()) : "0 đ");
-        lblValGiamAdmin.setText(r.getGiamGiaAdmin().intValue() > 0 ? "- " + vnCurrency.format(r.getGiamGiaAdmin()) : "0 đ");
-        lblValGiamShip.setText(r.getGiamGiaShip().intValue() > 0 ? "- " + vnCurrency.format(r.getGiamGiaShip()) : "0 đ");
+
+        lblValGiamShop
+                .setText(r.getGiamGiaShop().intValue() > 0 ? "- " + vnCurrency.format(r.getGiamGiaShop()) : "0 đ");
+        lblValGiamAdmin
+                .setText(r.getGiamGiaAdmin().intValue() > 0 ? "- " + vnCurrency.format(r.getGiamGiaAdmin()) : "0 đ");
+        lblValGiamShip
+                .setText(r.getGiamGiaShip().intValue() > 0 ? "- " + vnCurrency.format(r.getGiamGiaShip()) : "0 đ");
 
         lblValGiamShop.setForeground(r.getGiamGiaShop().intValue() > 0 ? SHOPEE_ORANGE : Color.BLACK);
         lblValGiamAdmin.setForeground(r.getGiamGiaAdmin().intValue() > 0 ? SHOPEE_ORANGE : Color.BLACK);
@@ -764,6 +779,7 @@ public class VoucherView extends JFrame {
 
         lblTongThanhToan.setText(vnCurrency.format(r.getTongThanhToan()));
     }
+
     public static void main(String[] args) {
         try {
             // Kích hoạt FlatLaf (Giao diện phẳng hiện đại)

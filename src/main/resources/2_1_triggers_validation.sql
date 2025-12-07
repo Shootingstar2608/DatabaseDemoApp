@@ -7,12 +7,10 @@ USE HeThongBanHang;
 GO
 
 -- --------------------------------------------------------------------------------------
--- TRIGGER 1: KIỂM TRA RÀNG BUỘC KHI THÊM/SỬA SẢN PHẨM
--- Yêu cầu: 
--- - Giá hiển thị > 0
--- - Tên sản phẩm không được rỗng
--- - Link sản phẩm không trùng (UNIQUE)
--- - Mã Shop phải tồn tại (FOREIGN KEY)
+-- TRIGGER 1: KIỂM TRA RÀNG BUỘC PHỨC TẠP KHI THÊM/SỬA SẢN PHẨM
+-- Lưu ý: Các validation đơn giản (Giá > 0, Tên/Loại không rỗng) đã chuyển sang
+--        CHECK CONSTRAINT trong định nghĩa bảng (tuân thủ yêu cầu đặc tả 1.1).
+--        Trigger chỉ xử lý logic phức tạp: Link trùng, kiểm tra FK runtime, Audit log.
 -- --------------------------------------------------------------------------------------
 CREATE OR ALTER TRIGGER TR_SanPham_KiemTraRangBuoc
 ON SAN_PHAM
@@ -25,7 +23,7 @@ BEGIN
     DECLARE @ErrorMsg NVARCHAR(MAX) = '';
     DECLARE @HasError BIT = 0;
 
-    -- KIỂM TRA 1: Giá hiển thị phải > 0
+    -- KIỂM TRA 1: Link sản phẩm không trùng (Logic phức tạp - cần so sánh với bản ghi khác)
     IF EXISTS (SELECT 1
     FROM inserted
     WHERE GiaHienThi <= 0)
@@ -65,11 +63,11 @@ BEGIN
             FROM SAN_PHAM sp
             WHERE sp.LinkSanPham = i.LinkSanPham AND sp.MaSanPham <> i.MaSanPham);
 
-        SET @ErrorMsg = @ErrorMsg + N' Lỗi: Link sản phẩm "' + @DuplicateLink + N'" đã được sử dụng.' + CHAR(13) + CHAR(10);
+        SET @ErrorMsg = @ErrorMsg + N' Lỗi: Link sản phẩm "' + @DuplicateLink + N'" đã được sử dụng bởi sản phẩm khác.' + CHAR(13) + CHAR(10);
         SET @HasError = 1;
     END
 
-    -- KIỂM TRA 4: Mã Shop phải tồn tại (FOREIGN KEY validation)
+    -- KIỂM TRA 2: Mã Shop phải tồn tại (Runtime FK validation với thông báo lỗi cụ thể)
     IF EXISTS (
         SELECT 1
     FROM inserted i
@@ -87,15 +85,6 @@ BEGIN
         WHERE ch.MaSoShop = i.MaSoShop);
 
         SET @ErrorMsg = @ErrorMsg + N' Lỗi: Mã Shop "' + @InvalidShop + N'" không tồn tại trong hệ thống.' + CHAR(13) + CHAR(10);
-        SET @HasError = 1;
-    END
-
-    -- KIỂM TRA 5: Loại sản phẩm không được rỗng
-    IF EXISTS (SELECT 1
-    FROM inserted
-    WHERE Loai IS NULL OR LTRIM(RTRIM(Loai)) = '')
-    BEGIN
-        SET @ErrorMsg = @ErrorMsg + N' Lỗi: Loại sản phẩm không được để trống.' + CHAR(13) + CHAR(10);
         SET @HasError = 1;
     END
 
