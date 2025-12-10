@@ -1733,7 +1733,7 @@ CREATE TABLE AUDIT_DANH_GIA
 );
 GO
 
-PRINT N'✅ Đã tạo 4 bảng AUDIT để ghi log triggers';
+PRINT N' Đã tạo 4 bảng AUDIT để ghi log triggers';
 GO
 
 USE HeThongBanHang;
@@ -1810,10 +1810,6 @@ FROM NHAN_TIN;
 -- -------------------------------------
 -- -------------------------------------
 -- -------------------------------------
-
-ALTER TABLE SAN_PHAM
-ADD SoSaoSanPham DECIMAL(2, 1) DEFAULT 0;
-GO
 
 -- ===
 
