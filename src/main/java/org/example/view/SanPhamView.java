@@ -47,7 +47,7 @@ public class SanPhamView extends JFrame {
         buttonPanel.add(btnReload);
 
         // NÚT MỚI: Xem lịch sử thay đổi (AUDIT)
-        JButton btnAudit = new JButton("📋 Xem lịch sử thay đổi");
+        JButton btnAudit = new JButton(" Xem lịch sử thay đổi");
         btnAudit.setForeground(new Color(0, 102, 204));
         btnAudit.addActionListener(e -> {
             AuditSanPhamView auditView = new AuditSanPhamView();

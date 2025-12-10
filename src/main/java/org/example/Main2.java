@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.view.QuanLySanPhamCRUD;
 import org.example.view.QuanLySanPhamView;
+import org.example.view.ThongKeView;
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,10 +24,10 @@ public class Main2 {
     private static void showMenu() {
         // Tạo menu chọn giao diện
         JFrame menuFrame = new JFrame("Menu Chính - Quản Lý Sản Phẩm");
-        menuFrame.setSize(500, 300);
+        menuFrame.setSize(500, 400);
         menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuFrame.setLocationRelativeTo(null);
-        menuFrame.setLayout(new GridLayout(3, 1, 10, 10));
+        menuFrame.setLayout(new GridLayout(4, 1, 10, 10));
 
         JLabel lblTitle = new JLabel("CHỌN GIAO DIỆN", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
@@ -46,6 +47,13 @@ public class Main2 {
         btnCRUD.setFocusPainted(false);
         btnCRUD.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        JButton btnThongKe = new JButton(" Thống Kê & Báo Cáo ");
+        btnThongKe.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnThongKe.setBackground(new Color(155, 89, 182));
+        btnThongKe.setForeground(Color.WHITE);
+        btnThongKe.setFocusPainted(false);
+        btnThongKe.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         btnTimKiem.addActionListener(e -> {
             QuanLySanPhamView view = new QuanLySanPhamView();
             view.setOnBackToMenu(() -> showMenu());
@@ -60,9 +68,29 @@ public class Main2 {
             menuFrame.dispose();
         });
 
+        btnThongKe.addActionListener(e -> {
+            try {
+                System.out.println("Đang mở ThongKeView...");
+                menuFrame.dispose();
+                ThongKeView thongKe = new ThongKeView();
+                thongKe.setOnBackToMenu(() -> {
+                    System.out.println("Quay lại menu từ ThongKeView...");
+                    SwingUtilities.invokeLater(() -> showMenu());
+                });
+                thongKe.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(menuFrame,
+                        "Lỗi khi mở giao diện Thống Kê:\n" + ex.getMessage(),
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         menuFrame.add(lblTitle);
         menuFrame.add(btnTimKiem);
         menuFrame.add(btnCRUD);
+        menuFrame.add(btnThongKe);
         menuFrame.setVisible(true);
     }
 }
