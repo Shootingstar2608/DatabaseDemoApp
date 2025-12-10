@@ -32,6 +32,8 @@ public class ShopOrderView extends JFrame {
     // --- LOGIC ---
     private ShopOrderDAO orderDAO = new ShopOrderDAO();
     private Timer debounceTimer;
+    // --- Thêm biến auto load lại danh sách
+    private Timer autoRefreshTimer;
 
     // --- COMPONENTS ---
     private JTextField txtMaShop;
@@ -164,6 +166,14 @@ public class ShopOrderView extends JFrame {
             public void removeUpdate(DocumentEvent e) { restartTimer(); }
             public void changedUpdate(DocumentEvent e) { restartTimer(); }
         });
+        // Lưu ý: Chỉ reload khi ô Mã Shop có dữ liệu
+        autoRefreshTimer = new Timer(2000, e -> {
+        if (!txtMaShop.getText().trim().isEmpty()) {
+            // Gọi loadData ở chế độ "yên lặng" (không hiện chữ Đang tìm kiếm...)
+            loadDataSilent(); 
+        }
+    });
+    autoRefreshTimer.start(); // Bắt đầu chạy ngay khi mở app
     }
 
     private void restartTimer() {
@@ -212,7 +222,50 @@ public class ShopOrderView extends JFrame {
             }
         }.execute();
     }
+    // Copy logic loadData cũ nhưng thêm phần lưu vị trí thanh cuộn
+private void loadDataSilent() {
+    String maShop = txtMaShop.getText().trim();
+    if (maShop.isEmpty()) return;
 
+    new SwingWorker<List<OrderDTO>, Void>() {
+        @Override
+        protected List<OrderDTO> doInBackground() throws Exception {
+            return orderDAO.getOrdersByShop(maShop);
+        }
+
+        @Override
+        protected void done() {
+            try {
+                List<OrderDTO> list = get();
+                
+                // [MỚI] Lưu vị trí dòng đang chọn và vị trí cuộn
+                int selectedRow = tableOrders.getSelectedRow();
+                JViewport viewport = (JViewport) tableOrders.getParent();
+                Point viewPosition = viewport.getViewPosition();
+
+                updateTable(list);
+
+                // [MỚI] Khôi phục lại vị trí cũ để không bị nhảy lên đầu trang
+                if (selectedRow >= 0 && selectedRow < tableOrders.getRowCount()) {
+                    tableOrders.setRowSelectionInterval(selectedRow, selectedRow);
+                }
+                viewport.setViewPosition(viewPosition);
+
+                // Cập nhật log nhẹ nhàng
+                if (list.isEmpty()) {
+                    lblStatusLog.setText("Không tìm thấy đơn hàng!");
+                    lblStatusLog.setForeground(ERROR_RED);
+                } else {
+                    // Có thể comment dòng này để log đỡ bị nháy liên tục
+                    // lblStatusLog.setText("Đã cập nhật mới nhất lúc " + java.time.LocalTime.now());
+                    // lblStatusLog.setForeground(SUCCESS_GREEN);
+                }
+            } catch (Exception e) {
+                // e.printStackTrace(); // Tắt log lỗi console cho đỡ rác nếu mạng lag xíu
+            }
+        }
+    }.execute();
+}
     private void updateTable(List<OrderDTO> list) {
         tableModel.setRowCount(0);
         

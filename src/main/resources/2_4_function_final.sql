@@ -476,7 +476,15 @@ BEGIN
     WHILE @@FETCH_STATUS = 0
     BEGIN
         SET @STT = @STT + 1;
-        
+        -- Set lại NULL để tránh các data này bị lưu dữ liệu từ lần duyệt trước của con trỏ
+        -- Để tránh trường hợp đơn sau nhận vơ giá trị của đơn trước
+        SET @VoucherShop = NULL;
+        SET @VoucherAdmin = NULL;
+        SET @VoucherTrans = NULL;
+        SET @TenGoc = NULL;
+        SET @TenBienThe = NULL;
+        SET @TongThanhToan = NULL;
+        SET @ThucThuCuaShop = NULL;
         -- Xử lý tên
         SELECT @TenGoc = TenSanPham FROM SAN_PHAM WHERE MaSanPham = @MaSanPham;
         IF @IDBienThe IS NOT NULL SELECT @TenBienThe = Ten FROM BIEN_THE_SAN_PHAM WHERE ID = @IDBienThe AND MaSanPham = @MaSanPham;
