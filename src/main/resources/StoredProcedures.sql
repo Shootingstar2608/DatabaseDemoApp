@@ -23,6 +23,7 @@ BEGIN
         sp.TenSanPham,
         sp.GiaHienThi, -- Cột Giá hiển thị
         sp.Loai,
+        sp.LinkSanPham, -- Cột Link sản phẩm
         sp.MaSoShop, -- Cột Mã Shop
         ch.Ten AS TenShop, -- Tên cửa hàng
         nd.HoVaTen AS TenChuShop, -- Tên chủ shop

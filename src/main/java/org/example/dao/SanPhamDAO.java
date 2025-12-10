@@ -71,6 +71,14 @@ public class SanPhamDAO {
                 sp.setLoai(rs.getString("Loai"));
                 sp.setMaSoShop(rs.getString("MaSoShop"));
 
+                // Lấy LinkSanPham
+                try {
+                    String linkSP = rs.getString("LinkSanPham");
+                    sp.setLinkSanPham(linkSP != null ? linkSP : "");
+                } catch (Exception e) {
+                    sp.setLinkSanPham("");
+                }
+
                 // Lấy tên shop
                 try {
                     String tenShop = rs.getString("TenShop");

@@ -75,7 +75,7 @@ public class QuanLySanPhamCRUD extends JFrame {
         border.setTitleJustification(javax.swing.border.TitledBorder.CENTER);
         // 3. Gán Border đã chỉnh sửa vào Panel
         panel.setBorder(border);
-        
+
         // Giữ độ rộng panel để giao diện cân đối
         panel.setPreferredSize(new Dimension(500, 0));
 
@@ -83,20 +83,20 @@ public class QuanLySanPhamCRUD extends JFrame {
 
         GridBagConstraints gbc = new GridBagConstraints();
         // Insets mặc định (sẽ được ghi đè trong addFormField)
-        gbc.insets = new Insets(8, 5, 8, 5); 
+        gbc.insets = new Insets(8, 5, 8, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // --- KHỞI TẠO CÁC FIELD ---
         txtMaSanPham = new JTextField(20);
         txtMaSoShop = new JTextField(20);
         txtTenSanPham = new JTextField(20);
-        
+
         // Cấu hình TextArea
         txtThongTinSanPham = new JTextArea(4, 20);
         txtThongTinSanPham.setLineWrap(true);
         txtThongTinSanPham.setWrapStyleWord(true);
         txtThongTinSanPham.setMargin(new Insets(8, 0, 8, 5));
-        txtThongTinSanPham.setFont(new Font("Segoe UI", Font.PLAIN, 14)); 
+        txtThongTinSanPham.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
         JScrollPane scrollThongTin = new JScrollPane(txtThongTinSanPham);
         scrollThongTin.setPreferredSize(new Dimension(0, 100));
@@ -120,11 +120,12 @@ public class QuanLySanPhamCRUD extends JFrame {
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.NORTHEAST; // Căn góc trên bên phải
-        // Insets: Trên 10, Trái 10, Dưới 5, Phải 15 (Để khớp với hàm addFormField bên dưới)
-        gbc.insets = new Insets(8, 10, 8, 15); 
+        // Insets: Trên 10, Trái 10, Dưới 5, Phải 15 (Để khớp với hàm addFormField bên
+        // dưới)
+        gbc.insets = new Insets(8, 10, 8, 15);
 
         JLabel lblThongTin = new JLabel("Thông Tin Sản Phẩm:");
-        lblThongTin.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
+        lblThongTin.setFont(new Font("Segoe UI", Font.BOLD, 16));
         panel.add(lblThongTin, gbc);
 
         // 2. ScrollPane chứa TextArea
@@ -149,15 +150,15 @@ public class QuanLySanPhamCRUD extends JFrame {
         // --- CẤU HÌNH CHO LABEL (GIỮ NGUYÊN) ---
         gbc.gridx = 0;
         gbc.gridy = row;
-        gbc.weightx = 0; 
+        gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.EAST; 
-        
+        gbc.anchor = GridBagConstraints.EAST;
+
         // Khoảng cách giữa Label và TextField là 15px
-        gbc.insets = new Insets(8, 10, 8, 15); 
-        
+        gbc.insets = new Insets(8, 10, 8, 15);
+
         JLabel lbl = new JLabel(label);
-        lbl.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
         panel.add(lbl, gbc);
 
         // --- CẤU HÌNH CHO TEXTFIELD ---
@@ -166,17 +167,17 @@ public class QuanLySanPhamCRUD extends JFrame {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(0, 10, 0, 10); 
-        
+        gbc.insets = new Insets(0, 10, 0, 10);
+
         field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        field.setPreferredSize(new Dimension(0, 40)); 
-        
+        field.setPreferredSize(new Dimension(0, 40));
+
         // === [THÊM DÒNG NÀY] ===
         // Đẩy chữ bên trong thụt vào 10px để thẳng hàng với ô Thông tin SP
         // Insets(Top, Left, Bottom, Right) -> Left = 10
-        field.setMargin(new Insets(0, 10, 0, 10)); 
+        field.setMargin(new Insets(0, 10, 0, 10));
         // =======================
-        
+
         panel.add(field, gbc);
     }
 
@@ -185,7 +186,8 @@ public class QuanLySanPhamCRUD extends JFrame {
         // 1. Tạo border và lưu vào biến
         javax.swing.border.TitledBorder border = BorderFactory.createTitledBorder("Danh Sách Sản Phẩm");
 
-        // 2. Cấu hình Font: Font Segoe UI, In Đậm (BOLD), Cỡ 24 (bạn có thể tăng lên 30 nếu muốn to hơn)
+        // 2. Cấu hình Font: Font Segoe UI, In Đậm (BOLD), Cỡ 24 (bạn có thể tăng lên 30
+        // nếu muốn to hơn)
         border.setTitleFont(new Font("Segoe UI", Font.BOLD, 30));
 
         // 3. (Tùy chọn) Chỉnh màu xanh đậm cho đồng bộ với giao diện của bạn
@@ -199,7 +201,7 @@ public class QuanLySanPhamCRUD extends JFrame {
         panel.setBackground(color);
 
         // Tạo bảng
-        String[] columns = { "Mã SP", "Tên Sản Phẩm", "Giá", "Loại", "Mã Shop" };
+        String[] columns = { "Mã SP", "Tên Sản Phẩm", "Giá", "Loại", "Link Sản Phẩm", "Mã Shop" };
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -235,8 +237,9 @@ public class QuanLySanPhamCRUD extends JFrame {
         DefaultTableCellRenderer customHeaderRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                           boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
 
                 // Trang trí giống nút bấm
                 label.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -247,12 +250,11 @@ public class QuanLySanPhamCRUD extends JFrame {
                 // Tạo viền nổi (RAISED) - Hiệu ứng 3D
                 label.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY),
-                        BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)
-                ));
+                        BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
 
                 // Xử lý Icon mũi tên dựa trên trạng thái Sort
                 String text = value.toString();
-                String icon = ""; 
+                String icon = "";
 
                 RowSorter<?> sorter = table.getRowSorter();
                 if (sorter != null) {
@@ -260,13 +262,13 @@ public class QuanLySanPhamCRUD extends JFrame {
                     if (!keys.isEmpty() && keys.get(0).getColumn() == column) {
                         SortOrder order = keys.get(0).getSortOrder();
                         if (order == SortOrder.ASCENDING) {
-                            icon = " ▲"; 
-                            label.setForeground(new Color(0, 150, 0)); 
-                            label.setBackground(new Color(220, 255, 220)); 
+                            icon = " ▲";
+                            label.setForeground(new Color(0, 150, 0));
+                            label.setBackground(new Color(220, 255, 220));
                         } else if (order == SortOrder.DESCENDING) {
-                            icon = " ▼"; 
-                            label.setForeground(new Color(200, 0, 0)); 
-                            label.setBackground(new Color(255, 220, 220)); 
+                            icon = " ▼";
+                            label.setForeground(new Color(200, 0, 0));
+                            label.setBackground(new Color(255, 220, 220));
                         }
                     }
                 }
@@ -280,11 +282,11 @@ public class QuanLySanPhamCRUD extends JFrame {
             table.getColumnModel().getColumn(i).setHeaderRenderer(customHeaderRenderer);
         }
 
-        // 4. Căn giữa dữ liệu cho cột Mã SP (0) và Mã Shop (4)
+        // 4. Căn giữa dữ liệu cho cột Mã SP (0) và Mã Shop (5)
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // Mã SP
-        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer); // Mã Shop
+        table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer); // Mã Shop
 
         // 5. Format cột Giá (2) hiển thị dấu phẩy ngăn cách (1,000,000)
         table.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
@@ -292,7 +294,7 @@ public class QuanLySanPhamCRUD extends JFrame {
 
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                           boolean hasFocus, int row, int column) {
+                    boolean hasFocus, int row, int column) {
                 if (value instanceof Number) {
                     value = formatter.format(value);
                 }
@@ -302,8 +304,10 @@ public class QuanLySanPhamCRUD extends JFrame {
         });
 
         // 6. Chỉnh độ rộng cột
+        table.getColumnModel().getColumn(0).setPreferredWidth(120); // Mã SP rộng hơn
         table.getColumnModel().getColumn(1).setPreferredWidth(250); // Tên SP rộng hơn
-        table.getColumnModel().getColumn(4).setPreferredWidth(100); // Mã shop nhỏ lại
+        table.getColumnModel().getColumn(4).setPreferredWidth(180); // Link SP
+        table.getColumnModel().getColumn(5).setPreferredWidth(100); // Mã shop nhỏ lại
 
         // ================== KẾT THÚC STYLE ==================
 
@@ -360,13 +364,13 @@ public class QuanLySanPhamCRUD extends JFrame {
     }
 
     private void styleButton(JButton button, Color color) {
-            // 1. Xóa dòng setPreferredSize cũ để nút không bị ép size
-        // button.setPreferredSize(new Dimension(width, 40)); 
+        // 1. Xóa dòng setPreferredSize cũ để nút không bị ép size
+        // button.setPreferredSize(new Dimension(width, 40));
 
         // 2. CHỈ ĐỊNH CHIỀU CAO CỐ ĐỊNH (40px), CHIỀU RỘNG TỰ DO
         // Dùng Dimension với chiều rộng là d.width (tự nhiên) và chiều cao 40
         Dimension d = button.getPreferredSize();
-        button.setPreferredSize(new Dimension(d.width + 40, 40)); 
+        button.setPreferredSize(new Dimension(d.width + 40, 40));
         // Mẹo: cộng thêm 40 vào chiều rộng để nút trông rộng rãi hơn, không bị sát chữ
 
         button.setBackground(color);
@@ -394,6 +398,7 @@ public class QuanLySanPhamCRUD extends JFrame {
                     sp.getTenSanPham(),
                     sp.getGiaHienThi(), // Giữ nguyên Double để sort đúng
                     sp.getLoai(),
+                    sp.getLinkSanPham(),
                     sp.getMaSoShop()
             });
         }

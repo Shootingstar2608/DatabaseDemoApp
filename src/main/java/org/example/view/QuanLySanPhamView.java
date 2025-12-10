@@ -17,7 +17,6 @@ import java.util.List;
 import java.text.Collator;
 import java.util.Locale;
 
-
 public class QuanLySanPhamView extends JFrame {
     private JTable table; // Bảng hiển thị sản phẩm
     private DefaultTableModel tableModel; // Kho dữ liệu
@@ -125,8 +124,6 @@ public class QuanLySanPhamView extends JFrame {
         txtLoai = new JTextField();
         txtMaShop = new JTextField();
         txtGia = new JTextField();
-        txtGia.setEditable(false);
-        txtGia.setBackground(new Color(245, 245, 245)); // màu xám nhẹ cho ô giá (không cho sửa)
         txtGiaMin = new JTextField();
         txtGiaMax = new JTextField();
 
@@ -158,7 +155,7 @@ public class QuanLySanPhamView extends JFrame {
         mainTopPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         mainTopPanel.add(detailPanel);
 
-        java.awt.Insets bigMargin = new java.awt.Insets(9, 18, 9, 18);//3 6 3 6
+        java.awt.Insets bigMargin = new java.awt.Insets(9, 18, 9, 18);// 3 6 3 6
         JPanel reloadPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         reloadPanel.setOpaque(false);
         JButton btnReload = new JButton("Làm Mới");
@@ -168,26 +165,28 @@ public class QuanLySanPhamView extends JFrame {
         btnReload.setMargin(bigMargin);
 
         // NÚT SỬA SẢN PHẨM
-        JButton btnSua = new JButton("✏️ Sửa");
+        JButton btnSua = new JButton("Sửa");
         btnSua.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btnSua.setBackground(new Color(255, 193, 7));
         btnSua.setForeground(Color.BLACK);
+        btnSua.setMargin(bigMargin);
 
         // NÚT XÓA SẢN PHẨM
-        JButton btnXoa = new JButton("🗑️ Xóa");
+        JButton btnXoa = new JButton("Xóa");
         btnXoa.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btnXoa.setBackground(new Color(220, 53, 69));
         btnXoa.setForeground(Color.WHITE);
+        btnXoa.setMargin(bigMargin);
 
         // NÚT XEM LỊCH SỬ AUDIT
-        JButton btnAudit = new JButton("📋 Lịch sử");
+        JButton btnAudit = new JButton("Lịch sử");
         btnAudit.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btnAudit.setBackground(new Color(0, 102, 204));
         btnAudit.setForeground(Color.WHITE);
+        btnAudit.setMargin(bigMargin);
         btnAudit.addActionListener(e -> {
             new AuditSanPhamView().setVisible(true);
         });
-        btnAudit.setMargin(bigMargin);
 
         btnLinkToFriend = new JButton("Quay lại Menu");
         btnLinkToFriend.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
@@ -362,7 +361,6 @@ public class QuanLySanPhamView extends JFrame {
             txtGia.setText("");
             txtGiaMin.setText("");
             txtGiaMax.setText("");
-            // 👇 SỬA LẠI ĐOẠN NÀY
             // Thay vì sorter.setSortKeys(null); hãy dùng code này:
             List<RowSorter.SortKey> defaultSort = new ArrayList<>();
             defaultSort.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
