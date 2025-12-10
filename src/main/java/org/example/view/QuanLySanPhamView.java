@@ -88,20 +88,30 @@ public class QuanLySanPhamView extends JFrame {
         // (Để tí nữa thêm thanh tìm kiếm vào nó không bị dính sát lên tiêu đề)
 
         // --- Tìm kiếm nhanh ---
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        searchPanel.setOpaque(false); // Làm cho panel này trong suốt (để nhìn xuyên qua thấy màu nền xanh của
-                                      // mainTopPanel)
-        searchPanel.add(createStyledLabelTimkiem("Tìm kiếm: ")); // Gọi hàm mới
-        txtTimKiem = new JTextField();
-        txtTimKiem.setPreferredSize(new Dimension(1350, 35)); // Rộng 600px, Cao 30px
+        // 1. Đổi Layout thành BorderLayout để quản lý vị trí tốt hơn
+        JPanel searchPanel = new JPanel(new BorderLayout(10, 0)); // Khoảng cách ngang giữa các phần tử là 10px
+        searchPanel.setOpaque(false);
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0)); // Cách lề dưới một chút cho đẹp
 
+        // Label nằm bên TRÁI (WEST)
+        searchPanel.add(createStyledLabelTimkiem("Tìm kiếm: "), BorderLayout.WEST);
+
+        txtTimKiem = new JTextField();
         txtTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        // QUAN TRỌNG: Không setPreferredSize chiều rộng cứng nữa, chỉ set chiều cao
+        txtTimKiem.setPreferredSize(new Dimension(0, 35));
+        // Ô nhập nằm ở GIỮA (CENTER) -> Tự động co giãn lấp đầy khoảng trống
+        searchPanel.add(txtTimKiem, BorderLayout.CENTER);
+
         JButton btnTimKiem = new JButton("Tìm Kiếm");
-        btnTimKiem.setBackground(new Color(0, 102, 204));
+        btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnTimKiem.setBackground(new Color(0, 190, 204));
         btnTimKiem.setForeground(Color.WHITE);
-        searchPanel.add(txtTimKiem); // Bỏ ô nhập vào bảng
-        searchPanel.add(btnTimKiem); // Bỏ nút bấm vào bảng (nằm ngay sau ô nhập)
-        mainTopPanel.add(searchPanel); // Bỏ nguyên cái bảng tìm kiếm này vào giao diện chính
+        btnTimKiem.setPreferredSize(new Dimension(120, 35)); // Set kích thước nút cho đẹp
+        // Nút nằm bên PHẢI (EAST)
+        searchPanel.add(btnTimKiem, BorderLayout.EAST);
+
+        mainTopPanel.add(searchPanel);
 
         JPanel detailPanel = new JPanel(new GridLayout(0, 4, 10, 5));
 
@@ -124,6 +134,9 @@ public class QuanLySanPhamView extends JFrame {
         txtLoai = new JTextField();
         txtMaShop = new JTextField();
         txtGia = new JTextField();
+        txtGia.setEditable(false); // Khóa không cho nhập
+        txtGia.setFocusable(false); // (Tùy chọn) Không cho trỏ chuột vào
+        txtGia.setBackground(new Color(230, 230, 230)); // (Tùy chọn) Đổi màu nền xám nhẹ để người dùng biết là chỉ đọc
         txtGiaMin = new JTextField();
         txtGiaMax = new JTextField();
 
@@ -167,8 +180,8 @@ public class QuanLySanPhamView extends JFrame {
         // NÚT SỬA SẢN PHẨM
         JButton btnSua = new JButton("Sửa");
         btnSua.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btnSua.setBackground(new Color(255, 193, 7));
-        btnSua.setForeground(Color.BLACK);
+        btnSua.setBackground(new Color(150, 100, 255));
+        btnSua.setForeground(Color.WHITE);
         btnSua.setMargin(bigMargin);
 
         // NÚT XÓA SẢN PHẨM
@@ -190,7 +203,7 @@ public class QuanLySanPhamView extends JFrame {
 
         btnLinkToFriend = new JButton("Quay lại Menu");
         btnLinkToFriend.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btnLinkToFriend.setBackground(new Color(220, 53, 69));
+        btnLinkToFriend.setBackground(new Color(255, 28, 90));
         btnLinkToFriend.setForeground(Color.WHITE);
         btnLinkToFriend.setMargin(bigMargin);
 
